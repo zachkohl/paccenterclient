@@ -1,6 +1,8 @@
+import googleId from "./googleAnalyticsId";
+
 function trackPageView(url) {
   try {
-    window.gtag("config", "UA-155059509-2", { page_location: url });
+    window.gtag("config", googleId, { page_location: url });
   } catch (error) {}
 }
 

@@ -4,7 +4,7 @@
 // ./pages/_document.js
 import Document, { Html, Head, Main, NextScript } from "next/document";
 import { Fragment } from "react";
-
+import googleId from "../utilities/googleAnalyticsId";
 class MyDocument extends Document {
   static async getInitialProps(ctx) {
     const productionStatus = process.env.NODE_ENV === "production";
@@ -18,7 +18,7 @@ class MyDocument extends Document {
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
     
-      gtag('config', 'UA-155059509-2');`
+      gtag('config', '${googleId}');`
     };
   }
 

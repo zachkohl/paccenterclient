@@ -29,7 +29,7 @@ export default class MyApp extends App {
     return (
       <>
         <Head>
-          <title>Habit Tracker</title>
+          <title>PAC CENTER</title>
           <meta
             name="viewport"
             content="initial-scale=1.0, width=device-width"

@@ -11,6 +11,9 @@
   "repository": "https://github.com/zachkohl/paccenterclient.git",
   "author": "zachkohl <zach.kohl@gmail.com>",
   "license": "NOLICENSE",
+  "engines": {
+    "node": "12.14.0"
+  },
   "dependencies": {
     "@zeit/next-css": "^1.0.1",
     "lodash": "^4.17.15",
