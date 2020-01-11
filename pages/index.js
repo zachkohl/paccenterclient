@@ -1,15 +1,13 @@
-import ReactDOM from "react-dom";
 import React from "react";
-import { Provider } from "react-redux";
-import store from "../redux/store";
-import Link from "next/link";
-import Login from "../components/Login";
 
-const index = props => {
+import Layout from "../components/layout";
+
+function Index(props) {
   return (
-    <Provider store={store}>
-      <Login />
-    </Provider>
+    <Layout>
+      <h1>Welcome to paccenter</h1>
+    </Layout>
   );
-};
-export default index;
+}
+
+export default Index;
