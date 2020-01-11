@@ -19,15 +19,26 @@ function Login(props) {
       });
   }
 
+  const checkUser = async () => {
+    const response = await fetch(`${BASE_URL}/api/checkuser`, {
+      method: "GET", // *GET, POST, PUT, DELETE, etc.
+      mode: "cors", // no-cors, *cors, same-origin
+      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: "same-origin", // include, *same-origin, omit
+      headers: {
+        "Content-Type": "application/json"
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      redirect: "follow", // manual, *follow, error
+      referrerPolicy: "no-referrer" // no-referrer, *client
+    });
+
+    const answer = await response.json();
+    console.log(answer);
+  };
+
   useEffect(() => {
-    axios
-      .get(`${BASE_URL}/api/checkuser`, { withCredentials: true })
-      .then(function(response) {
-        console.log(response);
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
+    checkUser();
   });
 
   function onClickLogout() {
