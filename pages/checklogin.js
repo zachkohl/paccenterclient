@@ -6,7 +6,7 @@ import Link from "next/link";
 import Login from "../components/Login";
 import axios from "axios";
 
-const BASE_URL = "http://localhost";
+const BASE_URL = "http://localhost:3000";
 const check = props => {
   return (
     <Provider store={store}>
@@ -28,7 +28,7 @@ check.getInitialProps = async ({ req, res }) => {
   };
 
   axios
-    .get(`${BASE_URL}/api/checkuser`, config)
+    .get(`${BASE_URL}/api/checkCampaigns`, config)
     .then(function(response) {
       console.log(response);
       if (response.data.status === true) {
