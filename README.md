@@ -21,4 +21,4 @@ database(s). This second server will run the socket.io
 
 https://dev.to/tesh254/environment-variables-from-env-file-in-nextjs-570b
 
-NOPE WE ARE GOING WITH AUT0!
+NOPE WE ARE GOING WITH AUT0!!
