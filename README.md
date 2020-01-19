@@ -20,3 +20,5 @@ During this login process, a simulatuous login will be conducted with a seperate
 database(s). This second server will run the socket.io
 
 https://dev.to/tesh254/environment-variables-from-env-file-in-nextjs-570b
+
+NOPE WE ARE GOING WITH AUT0!
