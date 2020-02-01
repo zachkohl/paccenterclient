@@ -7,9 +7,12 @@ export default function Basic(props) {
   const { user, loading } = useFetchUser();
   const [campaigns, setCampaigns] = useState("");
   useEffect(() => {
-    axios(
-      "https://paccenterapi.herokuapp.com/api/CheckCampaigns"
-    ).then(response => setCampaigns(response));
+    axios
+      .post("api/demo", {
+        firstName: "Fred",
+        lastName: "Flintstone"
+      })
+      .then(response => setCampaigns(JSON.stringify(response.data)));
   }, []);
   return (
     <Layout user={user} loading={loading}>
