@@ -26,7 +26,6 @@ function Register(props) {
 
     if (result.data.success === true) {
       Cookies.set("bearer", result.data.token);
-      Cookies.set("test", result.data.token);
       alert("result.success was true");
     } else {
       alert("access denied");
@@ -48,7 +47,7 @@ function Register(props) {
         type="text"
         id="username"
       ></input>
-      <label htmlFor="password">Username:</label>
+      <label htmlFor="password">Password:</label>
       <input
         type="password"
         id="password"

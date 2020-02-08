@@ -22,8 +22,9 @@ function Login(props) {
     console.log(result.data);
 
     if (result.data.success === true) {
+      //pull the token off the cookie
+
       Cookies.set("bearer", result.data.token);
-      Cookies.set("test", result.data.token);
       alert("result.success was true");
     } else {
       alert("access denied");

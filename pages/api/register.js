@@ -12,6 +12,7 @@ async function login(req, res) {
   if (axiosResult.data === "login complete") {
     const slice1 = axiosResult.headers["set-cookie"][0].split("bearer=");
     const tokenString = slice1[1].split(";")[0];
+    console.log(tokenString);
     // console.log(tokenString);
     // res.setHeader("Set-Cookie", `bearer=${tokenString}`);
     // res.send(axiosResult.data);
