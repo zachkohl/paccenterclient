@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Head from "next/head";
 import Cookies from "js-cookie";
+//import ToolLinks from "./ToolLinks";
 import {
   Dropdown,
   DropdownToggle,
@@ -18,7 +19,8 @@ function Layout(props) {
 
   const toggle = () => setDropdownOpen(prevState => !prevState);
   console.log(props.campaignList);
-  const campaignList = props.campaignList.map(campaign => {
+  const justCampaigns = Object.keys(props.campaignList);
+  const campaignList = justCampaigns.map(campaign => {
     console.log(campaign);
     return (
       <option value={campaign} key={campaign}>
@@ -75,11 +77,7 @@ function Layout(props) {
           </DropdownMenu>
         </Dropdown>
       </div>
-      <div className="sideBar">
-        <Link href={"/registration"} passHref>
-          <GreyLink>Link</GreyLink>
-        </Link>
-      </div>
+      <div className="sideBar">{"<ToolLinks />"}</div>
       <div className="contentArea">{props.children}</div>
     </div>
   );

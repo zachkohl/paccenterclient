@@ -9,7 +9,7 @@ async function login(req, res) {
     password: password
   });
   console.log(axiosResult.data);
-  if (axiosResult.data === "login complete") {
+  if (axiosResult.data.status === "login complete") {
     const slice1 = axiosResult.headers["set-cookie"][0].split("bearer=");
     const tokenString = slice1[1].split(";")[0];
     // console.log(tokenString);

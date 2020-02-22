@@ -3,7 +3,7 @@ import Layout from "../components/layout";
 import axios from "axios";
 function Protected({ campaignList }) {
   return (
-    <Layout title="dashboard" campaignList={["campaign A", "campaign B"]}>
+    <Layout title="dashboard" campaignList={campaignList}>
       <Render />
     </Layout>
   );
@@ -19,15 +19,16 @@ Protected.getInitialProps = async function(ctx) {
     const slice1 = cookies.split("bearer=")[1];
     const token = slice1.split(";")[0];
 
-    console.log(token);
+    // console.log(token);
 
     const checkUser = await axios.get("http://localhost:/api/CheckCampaigns", {
       headers: { cookie: `bearer=${token}` }
     });
-    console.log(checkUser);
+
     if (checkUser.data != "access denied") {
-      const campaignList = ["campaign A", "campaign B"];
-      return { Render: Render, campaignList: campaignList };
+      const campaignList = Object.keys(checkUser.data.campaigns);
+
+      return { Render: Render, campaignList: checkUser.data.campaigns };
     } else {
       return { Render: "access denied" };
     }
