@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
+import Router from "next/router";
 function Login(props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -25,14 +26,14 @@ function Login(props) {
       //pull the token off the cookie
 
       Cookies.set("bearer", result.data.token);
-      alert("result.success was true");
+      window.location.href = `http://localhost:3000/protected`;
     } else {
       alert("access denied");
     }
   };
 
   const logout = async () => {
-    Cookies.remove("bearer", { path: "" });
+    Cookies.remove("bearer", { path: "/" });
   };
 
   return (
@@ -46,7 +47,7 @@ function Login(props) {
         type="text"
         id="username"
       ></input>
-      <label htmlFor="password">Username:</label>
+      <label htmlFor="password">Password:</label>
       <input
         type="password"
         id="password"

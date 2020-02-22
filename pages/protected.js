@@ -1,13 +1,21 @@
 import Login from "../components/Login.jsx";
+import Layout from "../components/layout";
 import axios from "axios";
-function Protected({ Render }) {
-  return <div>{Render}</div>;
+function Protected({ campaignList }) {
+  return (
+    <Layout title="dashboard" campaignList={["campaign A", "campaign B"]}>
+      <Render />
+    </Layout>
+  );
 }
+const Render = () => {
+  return <p>This is the JSX content</p>;
+};
 
-Protected.getInitialProps = async function(req) {
+Protected.getInitialProps = async function(ctx) {
   try {
     //find the token
-    const cookies = req.req.headers.cookie;
+    const cookies = ctx.req.headers.cookie;
     const slice1 = cookies.split("bearer=")[1];
     const token = slice1.split(";")[0];
 
@@ -18,14 +26,17 @@ Protected.getInitialProps = async function(req) {
     });
     console.log(checkUser);
     if (checkUser.data != "access denied") {
-      const Render = <p>This is the JSX content</p>;
-      return { Render: Render };
+      const campaignList = ["campaign A", "campaign B"];
+      return { Render: Render, campaignList: campaignList };
     } else {
       return { Render: "access denied" };
     }
   } catch (err) {
     console.log(err);
-    return { Render: "please log in before accessing this resource" };
+    ctx.res.writeHead(302, { Location: "http://localhost:3000/" });
+    ctx.res.end();
+    return;
+    //return { Render: "please log in before accessing this resource" };
   }
 };
 
