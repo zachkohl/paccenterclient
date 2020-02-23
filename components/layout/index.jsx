@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Head from "next/head";
 import Cookies from "js-cookie";
-//import ToolLinks from "./ToolLinks";
+import ToolLinks from "./ToolLinks";
 import {
   Dropdown,
   DropdownToggle,
@@ -10,16 +10,14 @@ import {
 } from "reactstrap";
 
 import Link from "next/link";
-import styled from "styled-components";
-const GreyLink = styled.a`
-  color: grey;
-`;
+
 function Layout(props) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const toggle = () => setDropdownOpen(prevState => !prevState);
   console.log(props.campaignList);
   const justCampaigns = Object.keys(props.campaignList);
+  const [selectedCampaign, SetSelectedCampaign] = useState(justCampaigns[0]);
   const campaignList = justCampaigns.map(campaign => {
     console.log(campaign);
     return (
@@ -28,6 +26,10 @@ function Layout(props) {
       </option>
     );
   });
+
+  function changeCampaigns(event) {
+    SetSelectedCampaign(event.target.value);
+  }
 
   const logout = async () => {
     if (typeof window != "undefined") {
@@ -55,10 +57,23 @@ function Layout(props) {
           height: 100vh;
           float: left;
           background-color: blue;
+          padding: 0.5em;
         }
 
         .contentArea {
           posistion: relative;
+        }
+
+        a {
+          text-decoration: none;
+          color: red;
+          display: block;
+        }
+
+        a:visited {
+          text-decoration: none;
+          color: red;
+          display: block;
         }
       `}</style>
       <Head>
@@ -69,7 +84,9 @@ function Layout(props) {
         <div>
           <h1>PACCENTER</h1>
         </div>
-        <select className="campaignSelector">{campaignList}</select>
+        <select className="campaignSelector" onSelect={changeCampaigns}>
+          {campaignList}
+        </select>
         <Dropdown isOpen={dropdownOpen} toggle={toggle}>
           <DropdownToggle caret>Account</DropdownToggle>
           <DropdownMenu>
@@ -77,7 +94,9 @@ function Layout(props) {
           </DropdownMenu>
         </Dropdown>
       </div>
-      <div className="sideBar">{"<ToolLinks />"}</div>
+      <div className="sideBar">
+        <ToolLinks tools={props.campaignList[selectedCampaign]} />
+      </div>
       <div className="contentArea">{props.children}</div>
     </div>
   );
