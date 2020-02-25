@@ -1,7 +1,7 @@
-import Login from "../components/Login.jsx";
-import Layout from "../components/layout";
+import Login from "../../components/Login.jsx";
+import Layout from "../../components/layout";
 import axios from "axios";
-function Protected({ campaignList }) {
+function AdminPage({ campaignList }) {
   return (
     <Layout title="dashboard" campaignList={campaignList}>
       <Render />
@@ -9,10 +9,10 @@ function Protected({ campaignList }) {
   );
 }
 const Render = () => {
-  return <p>This is the JSX content</p>;
+  return <p>This is the Admin Page</p>;
 };
 
-Protected.getInitialProps = async function(ctx) {
+AdminPage.getInitialProps = async function(ctx) {
   if (typeof window === "undefined") {
     try {
       //find the token
@@ -28,7 +28,7 @@ Protected.getInitialProps = async function(ctx) {
           headers: { cookie: `bearer=${token}` }
         }
       );
-
+      console.log(token);
       if (checkUser.data != "access denied") {
         const campaignList = Object.keys(checkUser.data.campaigns);
 
@@ -60,10 +60,12 @@ Protected.getInitialProps = async function(ctx) {
         return { Render: "access denied" };
       }
     } catch (err) {
-      //  /     console.log(err);
-      return { Render: "please log in before accessing this resource" };
+      console.log(err);
+
+      return;
+      //return { Render: "please log in before accessing this resource" };
     }
   }
 };
 
-export default Protected;
+export default AdminPage;

@@ -37,6 +37,13 @@ function ToolLink(props) {
     );
   });
 
-  return <div>{toolList}</div>;
+  return (
+    <div>
+      {toolList}{" "}
+      <Link href={`/protected`} passHref>
+        <a>protected</a>
+      </Link>
+    </div>
+  );
 }
 export default ToolLink;
