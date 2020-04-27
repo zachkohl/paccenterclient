@@ -1,12 +1,5 @@
-import Login from "../components/Login.jsx";
-
-function Index() {
-  return (
-    <div>
-      <p>hello world</p>
-      <Login />
-    </div>
-  );
+function Home(props) {
+  return <p>Welcome</p>;
 }
 
-export default Index;
+export default Home;
