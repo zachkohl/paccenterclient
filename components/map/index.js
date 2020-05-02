@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import { Map, TileLayer, Marker, Popup, Tooltip } from "react-leaflet";
+import axios from "axios";
 
 function MapReact(props) {
+  const [meta, setMeta] = useState("meta");
+  const [points, setPoints] = useState("meta");
+  const [pointsNumber, setPointsNumber] = useState("meta");
+
   const [stuff, setStuff] = useState({
     lat: 47.6735,
     lng: 116.7812,
@@ -9,19 +14,52 @@ function MapReact(props) {
   });
   const position = [47.6735, -116.7812];
 
+  const MoveHandler = async (bounds) => {
+    const response = await axios.post("/api/getPoints", {
+      bounds: bounds,
+    });
+    console.log(response.data);
+    const newPoints = response.data.map((point, i) => {
+      return (
+        <Marker position={[point.coordinates[1], point.coordinates[0]]} key={i}>
+          <Popup>Popup for Marker</Popup>
+          <Tooltip>Tooltip for Marker</Tooltip>
+        </Marker>
+      );
+    });
+    setPoints(newPoints);
+  };
+
   return (
-    <Map center={position} zoom={13}>
-      <TileLayer
-        attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <Marker position={position}>
-        <Popup>Popup for Marker</Popup>
-        <Tooltip>Tooltip for Marker</Tooltip>
-      </Marker>
-    </Map>
+    <div>
+      <Map
+        center={position}
+        onMoveend={(e) => {
+          setMeta(JSON.stringify(e.target.getBounds()));
+
+          console.log(e.target.getCenter());
+          MoveHandler(e.target.getBounds());
+        }}
+        zoom={13}
+      >
+        <TileLayer
+          attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        {points}
+      </Map>
+      <p>{meta}</p>
+    </div>
   );
 }
+// function MyComponent(props) {
+//   const { map } = useLeaflet();
+// useEffect(()=>{
+//   const moveHandler
+// })
+
+// }
+
 export default function MapWrapper(props) {
   return (
     <div>
