@@ -20,36 +20,15 @@ export default async (req, res) => {
     // let text = `INSERT INTO ptest(geog) VALUES(${geoString}) RETURNING *;`;
     // let values = [];
 
-    let text = `SELECT ST_AsGeoJson(geog) FROM kcdatadump WHERE ST_CoveredBy(kcdatadump.geog,${geoString});`;
+    let text = `SELECT ST_AsGeoJson(geog),id FROM kcdatadump2 WHERE ST_CoveredBy(kcdatadump2.geog,${geoString});`;
     let values = [];
 
     const dbResponse = await db.query(text, values);
 
     const payload = dbResponse.rows.map((row) => {
-      console.log(row);
-      return JSON.parse(row.st_asgeojson);
+      return { geoJson: JSON.parse(row.st_asgeojson), id: row.id };
     });
-    // const text2 = `INSERT INTO ptest(name, geog) VALUES($1,$2) RETURNING *;`;
-    // const values2 = ["southWest", `SRID=4326; POINT(${southWest})`];
 
-    // const southWestdb = await db.query(text2, values2);
-
-    // const text3 = `INSERT INTO ptest(name, geog) VALUES($1,$2) RETURNING *;`;
-    // const values3 = ["northWest", `SRID=4326; POINT(${northWest})`];
-
-    // const northWestdb = await db.query(text3, values3);
-
-    // const text4 = `INSERT INTO ptest(name, geog) VALUES($1,$2) RETURNING *;`;
-    // const values4 = ["southEast", `SRID=4326; POINT(${southEast})`];
-
-    // const southEastdb = await db.query(text4, values4);
-
-    // const text5 = `INSERT INTO ptest(name, geog) VALUES($1,$2) RETURNING *;`;
-    // const values5 = ["northEast", `SRID=4326; POINT(${northEast})`];
-
-    // const northEastdb = await db.query(text5, values5);
-
-    // console.log(dbResponse);
     res.send(payload);
   } catch (err) {
     console.log(err);

@@ -1,11 +1,27 @@
 import React, { useState } from "react";
 import { Map, TileLayer, Marker, Popup, Tooltip } from "react-leaflet";
 import axios from "axios";
-
+import L from "leaflet";
+import Point from "./Point";
+import { Provider, useDispatch } from "react-redux";
+import store from "./store";
+import { useRouter } from "next/router";
+var socket = new WebSocket("ws:localhost:3000");
 function MapReact(props) {
   const [meta, setMeta] = useState("meta");
+  const [counter, setCounter] = useState(0);
   const [points, setPoints] = useState("meta");
   const [pointsNumber, setPointsNumber] = useState("meta");
+  const dispatch = useDispatch();
+  socket.onmessage = function (event) {
+    console.log(JSON.parse(event.data)["id"]);
+    dispatch({ type: "UPDATE", payload: event.data });
+  };
+  function send(message) {
+    // const payload = JSON.stringify({ point: message.id, list: listId });
+
+    socket.send(JSON.stringify({ pointId: message, listId: listId }));
+  }
 
   const [stuff, setStuff] = useState({
     lat: 47.6735,
@@ -14,17 +30,31 @@ function MapReact(props) {
   });
   const position = [47.6735, -116.7812];
 
+  const router = useRouter();
+  const { listId } = router.query;
+
   const MoveHandler = async (bounds) => {
     const response = await axios.post("/api/getPoints", {
       bounds: bounds,
     });
     console.log(response.data);
+
+    //https://gist.github.com/clhenrick/6791bb9040a174cd93573f85028e97af
+    //create custom icon and pass in as uri
+    //need to store the catch in redux
+    dispatch({ type: "LOAD", payload: response.data });
     const newPoints = response.data.map((point, i) => {
       return (
-        <Marker position={[point.coordinates[1], point.coordinates[0]]} key={i}>
-          <Popup>Popup for Marker</Popup>
-          <Tooltip>Tooltip for Marker</Tooltip>
-        </Marker>
+        <Point
+          point={point.geoJson}
+          walkingListId={listId}
+          pointId={point.id}
+          key={i}
+          id={point.id}
+          counter={counter}
+          setCounter={setCounter}
+          send={send}
+        />
       );
     });
     setPoints(newPoints);
@@ -32,6 +62,7 @@ function MapReact(props) {
 
   return (
     <div>
+      <h6>{listId}</h6>
       <Map
         center={position}
         onMoveend={(e) => {
@@ -40,7 +71,7 @@ function MapReact(props) {
           console.log(e.target.getCenter());
           MoveHandler(e.target.getBounds());
         }}
-        zoom={13}
+        zoom={18}
       >
         <TileLayer
           attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -63,9 +94,16 @@ function MapReact(props) {
 export default function MapWrapper(props) {
   return (
     <div>
-      <MapReact />
+      <Provider store={store}>
+        <MapReact />
+      </Provider>
       <style jsx global>
         {`
+          .my-div-icon {
+            color: green;
+            font-size: 2em;
+          }
+
           .leaflet-container {
             height: 400px;
             width: 800px;

@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "next",
+    "dev": "node server.js",
     "build": "next build",
-    "start": "next start"
+    "start": "NODE_ENV=production node server.js"
   },
   "author": "",
   "license": "ISC",
@@ -24,7 +24,11 @@
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-leaflet": "^2.6.3",
+    "react-redux": "^7.2.0",
     "reactstrap": "^8.4.1",
-    "styled-components": "^5.0.1"
+    "redux": "^4.0.5",
+    "styled-components": "^5.0.1",
+    "svg.js": "^2.7.1",
+    "ws": "^7.2.5"
   }
 }
