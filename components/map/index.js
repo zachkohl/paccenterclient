@@ -12,12 +12,30 @@ function MapReact(props) {
   const [counter, setCounter] = useState(0);
   const [points, setPoints] = useState("meta");
   const [fromdb, setFromdb] = useState([]);
+  const [change, setChange] = useState(false);
   const [pointsNumber, setPointsNumber] = useState("meta");
   const dispatch = useDispatch();
-  socket.onmessage = function (event) {
-    console.log(event.data);
-    dispatch({ type: "UPDATE", payload: event.data });
-  };
+  // socket.onmessage = function (event) {
+  //   console.log(event.data);
+  //   console.log(fromdb);
+  //   const msg = JSON.parse(event.data);
+  //   //find point
+  //   let newArray = [];
+  //   for (let i = 0; i < fromdb.length; i++) {
+  //     if (msg.pointid === fromdb[i].pointid) {
+  //       newArray.push({
+  //         ...fromdb[i],
+  //         number: msg.number,
+  //         pointid: msg.pointid,
+  //         walkinglistid: msg.walkinglistid,
+  //       });
+  //     } else {
+  //       newArray.push(fromdb[i]);
+  //     }
+  //   }
+  //   setChange(!change);
+  //   setFromdb(newArray);
+  // };
   function send(message) {
     // const payload = JSON.stringify({ point: message.id, list: listId });
 
@@ -38,50 +56,53 @@ function MapReact(props) {
     const response = await axios.post("/api/getPoints", {
       bounds: bounds,
     });
-    console.log(response.data);
+    const points = response.data.map((point, i) => {
+      var settings = {
+        className: "defaultIcon",
+        html: `<div>+<div>`,
+      };
 
-    //https://gist.github.com/clhenrick/6791bb9040a174cd93573f85028e97af
-    //create custom icon and pass in as uri
-    //need to store the catch in redux
-    setFromdb(response.data);
-    dispatch({ type: "LOAD", payload: response.data });
+      if (point.number > 0) {
+        console.log(point.number);
+        return (
+          <Point
+            point={point.geoJson}
+            walkingListId={listId}
+            pointId={point.id}
+            number={point.number}
+            key={i}
+            id={point.id}
+            iconsettings={{
+              className: "newIcon",
+              html: `<div>${Math.round(point.number)}<div>`,
+            }}
+          />
+        );
+      } else {
+        return (
+          <Point
+            point={point.geoJson}
+            walkingListId={listId}
+            pointId={point.id}
+            number={point.number}
+            key={i}
+            id={point.id}
+            iconsettings={{
+              className: "defaultIcon",
+              html: `<div>+<div>`,
+            }}
+          />
+        );
+      }
+    });
+    setPoints(points);
   };
+  //https://gist.github.com/clhenrick/6791bb9040a174cd93573f85028e97af
+  //create custom icon and pass in as uri
+  //need to store the catch in redux
+  // setFromdb(response.data);
+  //dispatch({ type: "LOAD", payload: response.data });
 
-  const pointsRedux = useSelector((state) => {
-    console.log(state.points);
-    const array = _.values(state.points);
-    console.log(array);
-    const points = array.map((point, i) => {
-      return (
-        <Point
-          point={point.geoJson}
-          walkingListId={listId}
-          pointId={point.id}
-          key={i}
-          id={point.id}
-          counter={counter}
-          setCounter={setCounter}
-          send={send}
-        />
-      );
-    });
-    return points;
-
-    return _.mapValues(state.points, (point, i) => {
-      return (
-        <Point
-          point={point.geoJson}
-          walkingListId={listId}
-          pointId={point.id}
-          key={i}
-          id={point.id}
-          counter={counter}
-          setCounter={setCounter}
-          send={send}
-        />
-      );
-    });
-  });
   // console.log(pointsRedux);
 
   return (
@@ -101,7 +122,7 @@ function MapReact(props) {
           attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {pointsRedux}
+        {points}
       </Map>
       <p>{meta}</p>
     </div>

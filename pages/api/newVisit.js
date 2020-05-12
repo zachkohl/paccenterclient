@@ -15,7 +15,7 @@ export default async (req, res) => {
     const nextVisit = Math.round(nextVisitResponse.rows[0].nextvisit);
     const incrementedNextVisit = nextVisit + 1;
 
-    text = `INSERT INTO visits(walkinglistid,pointid,number) VALUES($1,$2,$3)`;
+    text = `INSERT INTO visits(walkinglistid,pointid,number) VALUES($1,$2,$3) RETURNING *`;
     values = [walkingListId, pointId, nextVisit];
 
     const visitResponse = await db.query(text, values);
@@ -25,9 +25,9 @@ export default async (req, res) => {
 
     const walkinglistResponse = await db.query(text, values);
     console.log("new visit logged");
-    res.send("complete");
+    res.send(visitResponse.rows[0]);
   } catch (err) {
     console.log(err);
-    res.send(err);
+    res.send("error");
   }
 };
