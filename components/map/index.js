@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Map, TileLayer, Marker, Popup, Tooltip } from "react-leaflet";
 import axios from "axios";
 import L from "leaflet";
 import Point from "./Point";
-import { Provider, useDispatch } from "react-redux";
+import { Provider, useDispatch, useSelector } from "react-redux";
 import store from "./store";
 import { useRouter } from "next/router";
 var socket = new WebSocket("ws:localhost:3000");
@@ -11,10 +11,11 @@ function MapReact(props) {
   const [meta, setMeta] = useState("meta");
   const [counter, setCounter] = useState(0);
   const [points, setPoints] = useState("meta");
+  const [fromdb, setFromdb] = useState([]);
   const [pointsNumber, setPointsNumber] = useState("meta");
   const dispatch = useDispatch();
   socket.onmessage = function (event) {
-    console.log(JSON.parse(event.data)["id"]);
+    console.log(event.data);
     dispatch({ type: "UPDATE", payload: event.data });
   };
   function send(message) {
@@ -42,8 +43,15 @@ function MapReact(props) {
     //https://gist.github.com/clhenrick/6791bb9040a174cd93573f85028e97af
     //create custom icon and pass in as uri
     //need to store the catch in redux
+    setFromdb(response.data);
     dispatch({ type: "LOAD", payload: response.data });
-    const newPoints = response.data.map((point, i) => {
+  };
+
+  const pointsRedux = useSelector((state) => {
+    console.log(state.points);
+    const array = _.values(state.points);
+    console.log(array);
+    const points = array.map((point, i) => {
       return (
         <Point
           point={point.geoJson}
@@ -57,8 +65,24 @@ function MapReact(props) {
         />
       );
     });
-    setPoints(newPoints);
-  };
+    return points;
+
+    return _.mapValues(state.points, (point, i) => {
+      return (
+        <Point
+          point={point.geoJson}
+          walkingListId={listId}
+          pointId={point.id}
+          key={i}
+          id={point.id}
+          counter={counter}
+          setCounter={setCounter}
+          send={send}
+        />
+      );
+    });
+  });
+  // console.log(pointsRedux);
 
   return (
     <div>
@@ -77,7 +101,7 @@ function MapReact(props) {
           attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {points}
+        {pointsRedux}
       </Map>
       <p>{meta}</p>
     </div>
@@ -99,7 +123,11 @@ export default function MapWrapper(props) {
       </Provider>
       <style jsx global>
         {`
-          .my-div-icon {
+          .defaultIcon {
+            color: red;
+            font-size: 2em;
+          }
+          .newIcon {
             color: green;
             font-size: 2em;
           }

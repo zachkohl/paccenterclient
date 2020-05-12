@@ -1,10 +1,10 @@
 const db = require("../../lib/postgresSetup");
-const generateHash = require("../../lib/generateHash");
+const auth = require("../../lib/auth");
 export default async (req, res) => {
   try {
     const username = req.body.username;
     const password = req.body.password;
-    const hash = await generateHash.hash(password);
+    const hash = await auth.hash(password);
     console.log(hash);
     let text =
       "INSERT INTO users(users_username,users_storedhash) VALUES($1,$2) RETURNING *;";

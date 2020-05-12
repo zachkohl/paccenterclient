@@ -15,7 +15,7 @@ export default function Users(props) {
       .then(function (response) {
         if (response.data === "complete") {
           Router.push({
-            pathname: "/map",
+            pathname: "/newWalkingList",
           });
         }
       });

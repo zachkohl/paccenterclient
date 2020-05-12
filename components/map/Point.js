@@ -5,12 +5,12 @@ import L from "leaflet";
 import { useSelector } from "react-redux";
 import _ from "lodash";
 function Point(props) {
-  const newIcon = L.divIcon({
-    className: "my-div-icon",
-    html: `<div>Changed<div>`,
-  });
+  // const newIcon = L.divIcon({
+  //   className: "my-div-icon",
+  //   html: `<div>Changed<div>`,
+  // });
   const defaultIcon = L.divIcon({
-    className: "my-div-icon",
+    className: "defaultIcon",
     html: `<div>+<div>`,
   });
 
@@ -21,9 +21,39 @@ function Point(props) {
     });
   }
 
-  const icon = useSelector((state) => {
-    return _.get(state, `${props.id}.icon`);
+  const setter = useSelector((state) => {
+    return {
+      walkinglist: _.get(state, `points.${props.pointId}.walkinglist`),
+      number: _.get(state, `points.${props.pointId}.number`),
+    };
   });
+
+  if (setter.walkinglist === null) {
+    return (
+      <Marker
+        position={[props.point.coordinates[1], props.point.coordinates[0]]}
+        onClick={onClickHander}
+        icon={defaultIcon}
+      >
+        <Tooltip>{props.id}</Tooltip>
+      </Marker>
+    );
+  } else {
+    const newIcon = L.divIcon({
+      className: "newIcon",
+      html: `<div>${setter.number ? Math.round(setter.number) : 0}<div>`,
+    });
+
+    return (
+      <Marker
+        position={[props.point.coordinates[1], props.point.coordinates[0]]}
+        onClick={onClickHander}
+        icon={newIcon}
+      >
+        <Tooltip>{props.id}</Tooltip>
+      </Marker>
+    );
+  }
 
   // function HOC(z) {
   //   const x = z;
@@ -36,15 +66,6 @@ function Point(props) {
   //     })
   //   );
   // }
-  return (
-    <Marker
-      position={[props.point.coordinates[1], props.point.coordinates[0]]}
-      onClick={onClickHander}
-      icon={icon || defaultIcon}
-    >
-      <Tooltip>{props.id}</Tooltip>
-    </Marker>
-  );
 }
 
 export default Point;
