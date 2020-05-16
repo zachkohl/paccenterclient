@@ -14,8 +14,13 @@ function MapReact(props) {
   const [pointsNumber, setPointsNumber] = useState("meta");
   const dispatch = useDispatch();
   socket.onmessage = function (event) {
-    console.log(JSON.parse(event.data)["id"]);
-    dispatch({ type: "UPDATE", payload: event.data });
+    const update = JSON.parse(event.data);
+    console.log(update);
+    if (update.walkinglistid == listId) {
+      dispatch({ type: "UPDATE", payload: event.data });
+    } else {
+      dispatch({ type: "OTHER_LIST_UPDATE", payload: event.data });
+    }
   };
   function send(message) {
     // const payload = JSON.stringify({ point: message.id, list: listId });
@@ -36,6 +41,7 @@ function MapReact(props) {
   const MoveHandler = async (bounds) => {
     const response = await axios.post("/api/getPoints", {
       bounds: bounds,
+      walkinglistid: listId,
     });
     console.log(response.data);
 

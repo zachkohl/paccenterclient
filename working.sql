@@ -211,3 +211,22 @@
 --     number  NUMERIC (5, 2),
 --     CONSTRAINT visit_pkey PRIMARY KEY (walkinglistid,pointid)
 -- );
+
+
+
+
+-- CREATE TABLE KCADDRESSES AS 
+-- SELECT
+-- DISTINCT ON (geog) geog,
+-- id,
+--  streetnum ,
+-- street,
+-- unitnum,
+--  add_2,
+-- add_3,
+-- City,
+-- zip,
+-- st,
+-- zipplus,
+-- bingdump 
+-- FROM kcdatadump2;
