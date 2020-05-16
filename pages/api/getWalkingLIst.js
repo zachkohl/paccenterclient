@@ -9,7 +9,7 @@ export default async (req, res) => {
     if (dbResponse.name === "error") {
       res.send({ error: true });
     } else {
-      // console.log(dbResponse.rows);
+      console.log(dbResponse.rows);
       res.send({ error: false, rows: dbResponse.rows });
     }
   } catch (err) {

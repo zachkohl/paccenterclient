@@ -1,40 +1,36 @@
 import { createStore } from "redux";
 import _ from "lodash";
 import L from "leaflet";
-function reducer(state = { fresh: false }, action) {
+function reducer(state = {}, action) {
   switch (action.type) {
     case "LOAD":
       //build the point object
       let points = {};
-      console.log(`in store:${action.payload.length}`);
       for (let i = 0; i < action.payload.length; i++) {
-        const icon = "initial";
+        const icon = L.divIcon({
+          className: "my-div-icon",
+          html: `<div>NotChanged<div>`,
+        });
         const row = {
           ...action.payload[i],
           icon: icon,
-          walkinglist: action.payload[i].walkinglistid,
-          number: action.payload[i].number,
         };
-        _.set(points, `${action.payload[i].id}`, row);
+        _.set(points, `${action.payload[i].id}`, action.payload[i]);
       }
-      return { points: points, fresh: !state.fresh };
+      return { points: points };
 
     case "UPDATE":
       //mutate the only the address with that id
-      const msg = JSON.parse(action.payload);
-      console.log(msg);
-      if (_.has(state, `points.${msg.pointid}`)) {
-        console.log("already exist");
-        const newState = _.cloneDeep(state);
-        const walkinglist = msg.walkinglistid;
-        _.set(newState, `points.${msg.pointid}.walkinglist`, walkinglist);
-        _.set(newState, `points.${msg.pointid}.number`, msg.number);
-        return newState;
-      } else {
-        console.log("did not have point in redux");
-        return state;
-      }
-
+      const newState = _.cloneDeep(state);
+      console.log(
+        `payload id from inside store: ${JSON.parse(action.payload)["id"]}`
+      );
+      const icon = L.divIcon({
+        className: "my-div-icon",
+        html: `<div>CHANGED<div>`,
+      });
+      _.set(newState, `${JSON.parse(action.payload)["id"]}.icon`, icon);
+      return newState;
     default:
       return state;
   }

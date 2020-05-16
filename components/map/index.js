@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Map, TileLayer, Marker, Popup, Tooltip } from "react-leaflet";
 import axios from "axios";
 import L from "leaflet";
 import Point from "./Point";
-import { Provider, useDispatch, useSelector } from "react-redux";
+import { Provider, useDispatch } from "react-redux";
 import store from "./store";
 import { useRouter } from "next/router";
 var socket = new WebSocket("ws:localhost:3000");
@@ -11,31 +11,12 @@ function MapReact(props) {
   const [meta, setMeta] = useState("meta");
   const [counter, setCounter] = useState(0);
   const [points, setPoints] = useState("meta");
-  const [fromdb, setFromdb] = useState([]);
-  const [change, setChange] = useState(false);
   const [pointsNumber, setPointsNumber] = useState("meta");
   const dispatch = useDispatch();
-  // socket.onmessage = function (event) {
-  //   console.log(event.data);
-  //   console.log(fromdb);
-  //   const msg = JSON.parse(event.data);
-  //   //find point
-  //   let newArray = [];
-  //   for (let i = 0; i < fromdb.length; i++) {
-  //     if (msg.pointid === fromdb[i].pointid) {
-  //       newArray.push({
-  //         ...fromdb[i],
-  //         number: msg.number,
-  //         pointid: msg.pointid,
-  //         walkinglistid: msg.walkinglistid,
-  //       });
-  //     } else {
-  //       newArray.push(fromdb[i]);
-  //     }
-  //   }
-  //   setChange(!change);
-  //   setFromdb(newArray);
-  // };
+  socket.onmessage = function (event) {
+    console.log(JSON.parse(event.data)["id"]);
+    dispatch({ type: "UPDATE", payload: event.data });
+  };
   function send(message) {
     // const payload = JSON.stringify({ point: message.id, list: listId });
 
@@ -56,54 +37,28 @@ function MapReact(props) {
     const response = await axios.post("/api/getPoints", {
       bounds: bounds,
     });
-    const points = response.data.map((point, i) => {
-      var settings = {
-        className: "defaultIcon",
-        html: `<div>+<div>`,
-      };
+    console.log(response.data);
 
-      if (point.number > 0) {
-        console.log(point.number);
-        return (
-          <Point
-            point={point.geoJson}
-            walkingListId={listId}
-            pointId={point.id}
-            number={point.number}
-            key={i}
-            id={point.id}
-            iconsettings={{
-              className: "newIcon",
-              html: `<div>${Math.round(point.number)}<div>`,
-            }}
-          />
-        );
-      } else {
-        return (
-          <Point
-            point={point.geoJson}
-            walkingListId={listId}
-            pointId={point.id}
-            number={point.number}
-            key={i}
-            id={point.id}
-            iconsettings={{
-              className: "defaultIcon",
-              html: `<div>+<div>`,
-            }}
-          />
-        );
-      }
+    //https://gist.github.com/clhenrick/6791bb9040a174cd93573f85028e97af
+    //create custom icon and pass in as uri
+    //need to store the catch in redux
+    dispatch({ type: "LOAD", payload: response.data });
+    const newPoints = response.data.map((point, i) => {
+      return (
+        <Point
+          point={point.geoJson}
+          walkingListId={listId}
+          pointId={point.id}
+          key={point.id}
+          id={point.id}
+          counter={counter}
+          setCounter={setCounter}
+          send={send}
+        />
+      );
     });
-    setPoints(points);
+    setPoints(newPoints);
   };
-  //https://gist.github.com/clhenrick/6791bb9040a174cd93573f85028e97af
-  //create custom icon and pass in as uri
-  //need to store the catch in redux
-  // setFromdb(response.data);
-  //dispatch({ type: "LOAD", payload: response.data });
-
-  // console.log(pointsRedux);
 
   return (
     <div>
@@ -144,11 +99,7 @@ export default function MapWrapper(props) {
       </Provider>
       <style jsx global>
         {`
-          .defaultIcon {
-            color: red;
-            font-size: 2em;
-          }
-          .newIcon {
+          .my-div-icon {
             color: green;
             font-size: 2em;
           }

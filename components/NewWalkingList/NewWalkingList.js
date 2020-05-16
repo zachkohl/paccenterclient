@@ -32,9 +32,6 @@ function NewWalkingList(props) {
             <li key={row.id}>
               <Link href={`/list/${row.id}`}>
                 <a>{row.name}</a>
-              </Link>{" "}
-              <Link href={`/printlist/${row.id}`}>
-                <a>print</a>
               </Link>
             </li>
           );
