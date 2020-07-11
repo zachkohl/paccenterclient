@@ -22,13 +22,7 @@ var { Client } = require("pg");
 // });
 console.log("got websocket config setup");
 function websocketConfig(ws) {
-  const client = new Client({
-    user: "postgres",
-    host: "localhost",
-    database: "paccenter",
-    password: "postgres",
-    port: 5433,
-  });
+  const client = new Client({ connectionString: process.env.DATABASE_URL });
   client.connect();
 
   client.on("notification", function (msg) {
