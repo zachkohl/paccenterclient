@@ -18,11 +18,11 @@ app.prepare().then(() => {
     handle(req, res, parsedUrl);
   });
 
-  const ws = new WebSocket.Server({ server });
+  //const ws = new WebSocket.Server({ server });
 
-  const websocketConfig = require("./websocketConfig");
-  console.log(typeof websocketConfig);
-  websocketConfig(ws);
+  // const websocketConfig = require("./websocketConfig");
+  // console.log(typeof websocketConfig);
+  // websocketConfig(ws);
 
   server.listen(3000, (err) => {
     if (err) throw err;
