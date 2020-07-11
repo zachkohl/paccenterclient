@@ -22,7 +22,10 @@ var { Client } = require("pg");
 // });
 console.log("got websocket config setup");
 function websocketConfig(ws) {
-  const client = new Client({ connectionString: process.env.DATABASE_URL });
+  const client = new Client({
+    connectionString: process.env.DATABASE_URL,
+    ssl: true,
+  });
   client.connect();
 
   client.on("notification", function (msg) {
