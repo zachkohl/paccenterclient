@@ -13,22 +13,22 @@
   "dependencies": {
     "axios": "^0.19.2",
     "bcrypt": "^4.0.1",
-    "bootstrap": "^4.4.1",
+    "bootstrap": "^4.5.0",
     "js-cookie": "^2.2.1",
     "jsonwebtoken": "^8.5.1",
     "leaflet": "^1.6.0",
-    "next": "^9.2.1",
+    "next": "^9.4.4",
     "next-cookies": "^2.0.3",
-    "nookies": "^2.2.3",
-    "pg": "^8.0.3",
+    "nookies": "^2.3.2",
+    "pg": "^8.3.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "react-leaflet": "^2.6.3",
+    "react-leaflet": "^2.7.0",
     "react-redux": "^7.2.0",
-    "reactstrap": "^8.4.1",
+    "reactstrap": "^8.5.1",
     "redux": "^4.0.5",
-    "styled-components": "^5.0.1",
+    "styled-components": "^5.1.1",
     "svg.js": "^2.7.1",
-    "ws": "^7.2.5"
+    "ws": "^7.3.1"
   }
 }
