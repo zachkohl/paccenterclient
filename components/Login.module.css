@@ -1,0 +1,22 @@
+.background {
+  font-family: Arial;
+  text-align: justify;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -125px;
+  margin-left: -125px;
+}
+
+.label {
+  font-family: Arial;
+  color: black;
+  display: block;
+}
+
+.button {
+  font-family: Arial;
+  color: black;
+  display: block;
+  font-weight: bold;
+}

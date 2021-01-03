@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Router from "next/router";
+import styles from './Login.module.css'
 
 export default function Users(props) {
   const [username, setUsername] = useState("");
@@ -21,24 +22,37 @@ export default function Users(props) {
       });
   };
   return (
-    <div>
+    <div className={styles.background}>
       <div>
-        Login
-        <label>
-          username
+        
+	<h2>
+	  Log in to PACCENTER
+	</h2>
+        
+	<label>
+          <p>
+	    Username
+	  </p>
           <input
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           ></input>
         </label>
+
         <label>
-          password
+	   <p>
+	    Password
+	    </p>
           <input
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           ></input>
         </label>
-        <button onClick={submitHandler}>Submit</button>
+        
+	<button onClick={submitHandler} className={styles.button}>
+	    Log In
+	</button>
+      
       </div>
     </div>
   );
