@@ -1,5 +1,5 @@
 function Home(props) {
-  return <p>Welcome</p>;
+  return <p>Welcome to PACCENTER</p>;
 }
 
 export default Home;

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import styles from "./Login.module.css"
 
 export default function Users(props) {
   const [newUserName, setNewUserName] = useState("");
@@ -12,24 +13,35 @@ export default function Users(props) {
     });
   };
   return (
-    <div>
+    <div className={styles.background}>
       <div>
-        Create new user:
-        <label>
-          username
+
+        <h2>
+	  Add a New User
+        </h2>
+
+	<label>
+          <p>
+	    New Username
+	  </p>
           <input
             value={newUserName}
             onChange={(e) => setNewUserName(e.target.value)}
           ></input>
         </label>
-        <label>
-          password
+        
+	<label>
+          <p>
+	    New Password
+	  </p>
           <input
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
           ></input>
         </label>
-        <button onClick={submitHandler}>Submit</button>
+        
+	<button onClick={submitHandler} className={styles.button}>Create</button>
+      
       </div>
     </div>
   );
