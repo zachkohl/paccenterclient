@@ -7,7 +7,7 @@
     "dev": "node server.js",
     "build": "next build",
     "start": "NODE_ENV=production node server.js",
-    "heroku-prebuild": "npm run build"
+    "heroku-prebuild": "yarn build"
   },
   "author": "",
   "license": "ISC",
