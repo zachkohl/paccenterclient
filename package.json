@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "node server.js",
-    "build": "next build",
+    "build": "yarn next build",
     "start": "NODE_ENV=production node server.js",
     "heroku-prebuild": "yarn build"
   },
