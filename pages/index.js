@@ -1,5 +1,7 @@
-function Home(props) {
-  return <p>Welcome to PACCENTER</p>;
+import Home from "../components/Home";
+
+function HomePage(props) {
+  return <Home />;
 }
 
-export default Home;
+export default HomePage;
