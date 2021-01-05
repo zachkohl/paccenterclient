@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "node server.js",
-    "build": "yarn next build",
+    "build": "next build",
     "start": "NODE_ENV=production node server.js",
-    "heroku-prebuild": "yarn build"
+    "heroku-prebuild": "next build"
   },
   "author": "",
   "license": "ISC",
