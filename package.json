@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "node server.js",
     "build": "next build",
-    "start": "NODE_ENV=production node server.js"
+    "start": "NODE_ENV=production node server.js",
+    "heroku-prebuild": "yarn build"
   },
   "author": "",
   "license": "ISC",
@@ -30,5 +31,8 @@
     "styled-components": "^5.1.1",
     "svg.js": "^2.7.1",
     "ws": "^7.3.1"
+  },
+  "engines": {
+    "node": "12.19.0"
   }
 }
