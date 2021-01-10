@@ -20,3 +20,11 @@
   display: block;
   font-weight: bold;
 }
+
+.form {
+  font-family: Arial;
+  text-align: center;
+  position: absolute;
+  left: 50%;
+  margin-left: -100px;
+}
