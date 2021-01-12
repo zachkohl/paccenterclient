@@ -12,8 +12,6 @@ export default async (req, res) => {
     const signupstate = req.body.signupstate;
     const signupzip = req.body.signupzip;
 
-console.log("console log one");
-
     let text = `
       INSERT INTO signup(
       signup_name,
@@ -29,8 +27,6 @@ console.log("console log one");
       RETURNING *;`
       ;
 
-console.log("console log two");
-
     let values = [
       signupname,
       signupemail, 
@@ -42,17 +38,13 @@ console.log("console log two");
       signupstate,
       signupzip];
       
-console.log("console log three");
-
       
     const getUser = await db.query(text, values);
       if (getUser === null) {
       res.send("fail");
       return;
     }
-console.log("console log four");
     res.send("complete");
-console.log("console log five");
   }
 
   catch (err) {
@@ -60,7 +52,6 @@ console.log("console log five");
     res.send(err);
   }
 
-console.log("console log six");
 };
 
 

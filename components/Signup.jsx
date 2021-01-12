@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-//import Router from "next/router";
+import Router from "next/router";
 import styles from "./Layout.module.css";
 
 export default function Signup(props) {
@@ -16,18 +16,27 @@ export default function Signup(props) {
 
 
   const submitHandler = (e) => {
-    axios.post("/api/newSignup", {
-      signupname:     newSignupName,
-      signupemail:    newSignupEmail,
-      signupphone:    newSignupPhone,
-      signupaddress1: newSignupAddress1,
-      signupaddress2: newSignupAddress2,
-      signupcity:     newSignupCity,
-      signupcounty:   newSignupCounty,
-      signupstate:    newSignupState,
-      signupzip:      newSignupZip,
-    });
+    axios
+      .post("/api/newSignup", {
+        signupname:     newSignupName,
+        signupemail:    newSignupEmail,
+        signupphone:    newSignupPhone,
+        signupaddress1: newSignupAddress1,
+        signupaddress2: newSignupAddress2,
+        signupcity:     newSignupCity,
+        signupcounty:   newSignupCounty,
+        signupstate:    newSignupState,
+        signupzip:      newSignupZip,
+      })
+      .then(function (response) {
+        if (response.data === "complete") {
+          Router.push({
+            pathname: "/dashboard",
+          });
+        }
+      });
   };
+
 
   return (
     <div className={styles.form}>
