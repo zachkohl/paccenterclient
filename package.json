@@ -6,15 +6,19 @@
   "scripts": {
     "dev": "node server.js",
     "build": "next build",
+    "mapBuilder": "node ./utils/mapInsert.js",
     "start": "NODE_ENV=production node server.js",
     "heroku-prebuild": "yarn install && yarn next build"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@fast-csv/parse": "^4.3.6",
     "axios": "^0.19.2",
     "bcrypt": "^4.0.1",
     "bootstrap": "^4.5.0",
+    "dotenv": "^8.2.0",
+    "fast-csv": "^4.3.6",
     "js-cookie": "^2.2.1",
     "jsonwebtoken": "^8.5.1",
     "leaflet": "^1.6.0",
@@ -22,6 +26,7 @@
     "next-cookies": "^2.0.3",
     "nookies": "^2.3.2",
     "pg": "^8.3.0",
+    "puppeteer": "^5.5.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-leaflet": "^2.7.0",

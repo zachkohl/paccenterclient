@@ -1,0 +1,2 @@
+district name,address,Source:
+AMBULANCE,https://services.arcgis.com/91hXl6NfvLGEi8x5/arcgis/rest/services/Idaho_City_Taxing_Districts/FeatureServer/2/query?where=NAME%20%3D%20'BOUNDARY%20COUNTY%20AMBULANCE'&outFields=*&returnDistinctValues=true&outSR=4326&f=json,https://gisdata-istc.opendata.arcgis.com/pages/datasets
