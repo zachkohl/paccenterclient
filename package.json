@@ -7,6 +7,7 @@
     "dev": "node server.js",
     "build": "next build",
     "mapBuilder": "node ./utils/mapInsert.js",
+    "mapMulti": "node ./utils/mapMulti.js",
     "start": "NODE_ENV=production node server.js",
     "heroku-prebuild": "yarn install && yarn next build"
   },

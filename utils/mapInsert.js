@@ -5,7 +5,7 @@ const path = require('path');
 const csv = require('fast-csv');
 const puppeteer = require('puppeteer');
 const axios = require('axios');
-
+const readAPI = require('./mapMulti');
 async function readCSV(){
 
 
@@ -13,41 +13,20 @@ async function readCSV(){
     .pipe(csv.parse({ headers: true }))
     .on('error', error => console.error(error))
     .on('data', async row => {
-        //process each row in the csv
-    //     const browser = await puppeteer.launch();
-    //     const page = await browser.newPage();
-    //     const apiAddress = row.address;
-    //  await page.goto(apiAddress);
-    //   const content = await page.$('pre');
-    //   const text = await (await content.getProperty('textContent')).jsonValue();
-    //   blob = JSON.parse(text)
+  
+        /**
+         * Here we are attempting to read from the CSV and use it to 
+         * A: get data from the public api
+         * B: reformat the API data into something we can use with our database
+         * C: put it in the database
+         *
+         */
 
     try{
-   response = await axios.get(row.address)
-    blob = response.data;
-// console.log(blob)
-     let data = JSON.stringify(blob);
+        if(row.address.length>5){
+   response = await readAPI(row.address)
+        }
 
-       console.log(blob.features[0].geometry.rings[0])
-
-const latLong = blob.features[0].geometry.rings[0];
-
-let coordinates = '';
-for(let i=0;i<latLong.length;i++){
-    coordinates = coordinates + latLong[i][0] + ' ' + latLong[i][1]
-    if(i<latLong.length-1){
-        coordinates =  coordinates + ', '
-    }
-}
-
-//fs.writeFileSync('map.json', data);
-
-const testdata = `ST_GeogFromText('POLYGON((-116.049168634002 48.5179618100009, -117.032367779002 48.9768856540008 ,-116.049168634002 48.5179618100009))')`
-
-        let sql = `INSERT INTO MAPS(name,source,perimeter) VALUES('test2','need to learn to escape web addresses',ST_GeogFromText('POLYGON((${coordinates}))'));`;
-    let values = [];
-    fs.writeFileSync('map.txt', sql);
-  const dbResponse = await db.query(sql, values);
 }catch(error){
     console.log('database error',error)
 }
@@ -57,7 +36,7 @@ const testdata = `ST_GeogFromText('POLYGON((-116.049168634002 48.5179618100009, 
 
 // await browser.close();
     })
-    .on('end', rowCount => console.log(`Parsed ${rowCount} rows`));
+    .on('end', rowCount => console.log(`Parsed ${rowCount} rows into maps! check the database for results`));
 
 /**
  * TODO: put stuff in the database
