@@ -4,7 +4,7 @@ export default async (req, res) => {
     console.log(req.body.address)
 
 const response = await axios.get("https://maps.googleapis.com/maps/api/geocode/json",{params:{
-    key:"AIzaSyDgEY8Z2Ue-a-4fPUYGVexOZklbC5fmpcs",
+    key: process.env.GOOGLEKEY,
     address:req.body.address
 }});
 

@@ -8,6 +8,7 @@
     "build": "next build",
     "mapBuilder": "node ./utils/mapInsert.js",
     "mapMulti": "node ./utils/mapMulti.js",
+    "moveMap": "node ./utils/moveToMapsTable.js",
     "start": "NODE_ENV=production node server.js",
     "heroku-prebuild": "yarn install && yarn next build"
   },
@@ -15,9 +16,11 @@
   "license": "ISC",
   "dependencies": {
     "@fast-csv/parse": "^4.3.6",
+    "@material-ui/core": "^4.11.3",
     "axios": "^0.19.2",
     "bcrypt": "^4.0.1",
     "bootstrap": "^4.5.0",
+    "btoa": "^1.2.1",
     "dotenv": "^8.2.0",
     "fast-csv": "^4.3.6",
     "js-cookie": "^2.2.1",
@@ -31,6 +34,8 @@
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-leaflet": "^2.7.0",
+    "react-markdown": "^5.0.3",
+    "react-mde": "^11.0.6",
     "react-redux": "^7.2.0",
     "reactstrap": "^8.5.1",
     "redux": "^4.0.5",
@@ -40,5 +45,9 @@
   },
   "engines": {
     "node": "14.15.4"
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.2",
+    "typescript": "^4.2.3"
   }
 }
