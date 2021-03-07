@@ -10,7 +10,8 @@
     "mapMulti": "node ./utils/mapMulti.js",
     "moveMap": "node ./utils/moveToMapsTable.js",
     "start": "NODE_ENV=production node server.js",
-    "heroku-prebuild": "yarn install && yarn next build"
+    "heroku-prebuild": "yarn install && yarn next build",
+    "postinstall": "tsc && mv -i -v public dist/ && rm -v -rf src"
   },
   "author": "",
   "license": "ISC",
