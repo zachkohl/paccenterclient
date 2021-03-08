@@ -3,12 +3,19 @@ import MarkdownEditor from "./MarkdownEditor";
 import SaveDialog from "./SaveDialog";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import Select from "react-select";
 function reporterPage() {
+  const [dateValue, setDateValue] = useState(new Date());
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("**Hello world!!!**");
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [fileName, setFileName] = useState("");
+  const [juristiction, setJuristiction] = useState({
+    value: { isJuristiction: false, organizations: [] },
+  });
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -36,8 +43,58 @@ function reporterPage() {
     alert(response.data);
   }
 
+  const Sandpoint = {
+    isJuristiction: true,
+    organizations: [
+      {
+        value: {
+          isOrg: true,
+          meetings: [{ value: "example value", label: "meeting" }],
+        },
+        label: "City_Council",
+      },
+    ],
+  };
+
+  const BonnerCounty = {
+    isJuristiction: true,
+    organizations: [
+      {
+        value: {
+          isOrg: true,
+          meetings: [{ value: "example value", label: "meeting" }],
+        },
+        label: "Board_of_Commissioners",
+      },
+      { value: "strawberry", label: "Bonnery County" },
+    ],
+  };
+
+  const jurisdictions = [
+    { value: Sandpoint, label: "Sandpoint" },
+    { value: BonnerCounty, label: "Bonnery County" },
+  ];
+
   return (
     <div>
+      Date of event:
+      <DatePicker
+        selected={dateValue}
+        onChange={(date) => setDateValue(date)}
+        dateFormat="yyyy/MM/dd"
+      />
+      <br />
+      <Select
+        options={jurisdictions}
+        onChange={(option) => setJuristiction(option)}
+      />
+      {juristiction.value.isJuristiction && (
+        <Select
+          options={juristiction.value.organizations}
+          onChange={(option) => setJuristiction(option)}
+        />
+      )}
+      {JSON.stringify(juristiction)}
       filename:
       <input value={fileName} onChange={(e) => setFileName(e.target.value)} />
       <MarkdownEditor value={value} setValue={setValue} />
