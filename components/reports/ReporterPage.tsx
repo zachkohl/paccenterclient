@@ -1,21 +1,54 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MarkdownEditor from "./MarkdownEditor";
 import SaveDialog from "./SaveDialog";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import "react-modern-calendar-datepicker/lib/DatePicker.css";
+import DatePicker from "react-modern-calendar-datepicker";
 import Select from "react-select";
 function reporterPage() {
-  const [dateValue, setDateValue] = useState(new Date());
+  const [selectedDay, setSelectedDay] = useState(null);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("**Hello world!!!**");
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [fileName, setFileName] = useState("");
   const [juristiction, setJuristiction] = useState({
-    value: { isJuristiction: false, organizations: [] },
+    value: {
+      isJuristiction: false,
+      organizations: [],
+    },
+    label: "",
   });
+  const [organization, setOrganization] = useState({
+    value: {
+      isOrganization: false,
+      meetings: [],
+    },
+    label: "",
+  });
+  const [meeting, setMeeting] = useState({
+    value: {
+      isMeeting: false,
+    },
+    label: "",
+  });
+
+  useEffect(() => {
+    const place =
+      juristiction.label + "_" + organization.label + "_" + meeting.label + "-";
+
+    const time =
+      selectedDay?.year.toString() +
+      "-" +
+      selectedDay?.month.toString() +
+      "-" +
+      selectedDay?.day.toString();
+    setFileName(place + time);
+    console.log(place);
+    console.log(time);
+  }, [juristiction, organization, meeting, selectedDay]);
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -48,8 +81,8 @@ function reporterPage() {
     organizations: [
       {
         value: {
-          isOrg: true,
-          meetings: [{ value: "example value", label: "meeting" }],
+          isOrganization: true,
+          meetings: [{ value: { isMeeting: true }, label: "meeting" }],
         },
         label: "City_Council",
       },
@@ -61,7 +94,7 @@ function reporterPage() {
     organizations: [
       {
         value: {
-          isOrg: true,
+          isOrganization: true,
           meetings: [{ value: "example value", label: "meeting" }],
         },
         label: "Board_of_Commissioners",
@@ -77,26 +110,48 @@ function reporterPage() {
 
   return (
     <div>
+      <h1>Situation Report</h1>
       Date of event:
       <DatePicker
-        selected={dateValue}
-        onChange={(date) => setDateValue(date)}
-        dateFormat="yyyy/MM/dd"
+        value={selectedDay}
+        onChange={setSelectedDay}
+        inputPlaceholder="Select day of event"
+        shouldHighlightWeekends
       />
       <br />
-      <Select
-        options={jurisdictions}
-        onChange={(option) => setJuristiction(option)}
-      />
-      {juristiction.value.isJuristiction && (
+      <label>
+        Select Juristiction
         <Select
-          options={juristiction.value.organizations}
+          options={jurisdictions}
           onChange={(option) => setJuristiction(option)}
+          instanceId="1"
         />
+      </label>
+      {juristiction.value.isJuristiction && (
+        <label>
+          Select organization
+          <Select
+            options={juristiction.value.organizations}
+            onChange={(option) => setOrganization(option)}
+            instanceId="2"
+          />
+        </label>
       )}
-      {JSON.stringify(juristiction)}
-      filename:
-      <input value={fileName} onChange={(e) => setFileName(e.target.value)} />
+      {organization.value.isOrganization && (
+        <label>
+          Select meeting
+          <Select
+            options={organization.value.meetings}
+            onChange={(option) => setMeeting(option)}
+            instanceId="3"
+          />
+        </label>
+      )}
+      <br />
+      <label>
+        filename:
+        <input value={fileName} onChange={(e) => setFileName(e.target.value)} />
+      </label>
       <MarkdownEditor value={value} setValue={setValue} />
       <Button variant="outlined" color="primary" onClick={handleClickOpen}>
         Save
