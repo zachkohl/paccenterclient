@@ -44,10 +44,11 @@ async function submitReport(req, res, counter = 0) {
     console.log(err);
     if (counter < 5) {
       submitReport(req, res, counter + 1);
+    } else {
+      res.send(
+        "Error. Check your credentials. Also the filename needs to be unique, so try adding random numbers to the end"
+      );
     }
-    res.send(
-      "Error. Check your credentials. Also the filename needs to be unique, so try adding random numbers to the end"
-    );
   }
 }
 export default submitReport;
