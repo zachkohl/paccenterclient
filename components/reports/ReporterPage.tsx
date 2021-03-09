@@ -213,11 +213,7 @@ function reporterPage() {
         <PopupState variant="popover" popupId="demo-popup-popover">
           {(popupState) => (
             <span>
-              <span
-                variant="contained"
-                color="primary"
-                {...bindTrigger(popupState)}
-              >
+              <span color="primary" {...bindTrigger(popupState)}>
                 Politician
               </span>
               <Popover
