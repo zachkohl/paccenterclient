@@ -1,15 +1,55 @@
-import React, { useState, useEffect } from "react";
-import MarkdownEditor from "./MarkdownEditor";
+import React, { useState, useEffect, useRef } from "react";
+import ReactMde, { Command, Suggestion } from "react-mde";
+import ReactMarkdown from "react-markdown";
+import "react-mde/lib/styles/css/react-mde-all.css";
 import SaveDialog from "./SaveDialog";
 import Button from "@material-ui/core/Button";
+import Popover from "@material-ui/core/Popover";
 import axios from "axios";
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
 import DatePicker from "react-modern-calendar-datepicker";
 import Select from "react-select";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
+import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
+
 function reporterPage() {
+  const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+      popover: {
+        pointerEvents: "none",
+      },
+      paper: {
+        padding: theme.spacing(1),
+      },
+    })
+  );
+
+  const classes = useStyles();
+  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+
+  const handlePopoverOpen = (
+    event: React.MouseEvent<HTMLElement, MouseEvent>
+  ) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const openPopover = Boolean(anchorEl);
+
+  type mdeMode = "write" | "preview";
+  const textOp = useRef(null);
+  const politicians = useRef(null);
+  const [politicianButtons, setPoliticianButtons] = useState(["test"]);
   const [selectedDay, setSelectedDay] = useState(null);
+  const [selectedTab, setSelectedTab] = useState("write" as mdeMode);
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("**Hello world!!!**");
+  const [value, setValue] = useState(
+    "**Replace this with your meeting notes. Be sure to play with the # symbol!**"
+  );
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [fileName, setFileName] = useState("");
@@ -30,6 +70,7 @@ function reporterPage() {
   const [meeting, setMeeting] = useState({
     value: {
       isMeeting: false,
+      politicians: [],
     },
     label: "",
   });
@@ -45,8 +86,6 @@ function reporterPage() {
       "-" +
       selectedDay?.day.toString();
     setFileName(place + time);
-    console.log(place);
-    console.log(time);
   }, [juristiction, organization, meeting, selectedDay]);
 
   const handleClickOpen = () => {
@@ -82,7 +121,22 @@ function reporterPage() {
       {
         value: {
           isOrganization: true,
-          meetings: [{ value: { isMeeting: true }, label: "meeting" }],
+          meetings: [
+            {
+              value: {
+                isMeeting: true,
+                politicians: [
+                  "Shannon_Sherman",
+                  "Deb_Ruehle",
+                  "Joel_Aispuro",
+                  "John_Darling",
+                  "Kate_McAlister",
+                  "Andy_Groat",
+                ],
+              },
+              label: "meeting",
+            },
+          ],
         },
         label: "City_Council",
       },
@@ -107,6 +161,87 @@ function reporterPage() {
     { value: Sandpoint, label: "Sandpoint" },
     { value: BonnerCounty, label: "Bonnery County" },
   ];
+
+  function loadSuggestions(text): Promise<Suggestion[]> {
+    return new Promise((accept, reject) => {
+      setTimeout(() => {
+        const suggestions = [
+          {
+            preview: "TaxOffLand",
+            value: "#TaxOffLand",
+          },
+          {
+            preview: "Morality",
+            value: "#morality",
+          },
+          {
+            preview: "KeyLocalIssue3",
+            value: "#keyissue3",
+          },
+          {
+            preview: "KeyLocalIssue4",
+            value: "#keyissue4",
+          },
+        ].filter((i) => i.preview.toLowerCase().includes(text.toLowerCase()));
+        accept((suggestions as unknown) as Promise<Suggestion[]>);
+      }, 100);
+    });
+  }
+  function handlePolitician(name) {
+    if (textOp) {
+      const string = ` #${name}`;
+      textOp.current.textApi.replaceSelection(string);
+    }
+  }
+
+  useEffect(() => {
+    const list = meeting.value.politicians.map((politician) => {
+      console.log(politician);
+      return (
+        <li key={politician} onClick={(e) => handlePolitician(politician)}>
+          {politician}
+        </li>
+      );
+    });
+    console.log(list);
+    politicians.current = list;
+  }, [meeting]);
+
+  const politicianCommand: Command = {
+    icon: () => (
+      <span role="img" aria-label="Politician">
+        <PopupState variant="popover" popupId="demo-popup-popover">
+          {(popupState) => (
+            <span>
+              <span
+                variant="contained"
+                color="primary"
+                {...bindTrigger(popupState)}
+              >
+                Politician
+              </span>
+              <Popover
+                {...bindPopover(popupState)}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "center",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "center",
+                }}
+              >
+                <ul>{politicians.current}</ul>
+              </Popover>
+            </span>
+          )}
+        </PopupState>
+      </span>
+    ),
+    execute: (opts) => {
+      textOp.current = opts;
+    },
+  };
 
   return (
     <div>
@@ -152,7 +287,26 @@ function reporterPage() {
         filename:
         <input value={fileName} onChange={(e) => setFileName(e.target.value)} />
       </label>
-      <MarkdownEditor value={value} setValue={setValue} />
+      <ReactMde
+        value={value}
+        onChange={setValue}
+        selectedTab={selectedTab}
+        onTabChange={setSelectedTab}
+        generateMarkdownPreview={(markdown) =>
+          Promise.resolve(<ReactMarkdown source={markdown} />)
+        }
+        loadSuggestions={loadSuggestions}
+        suggestionTriggerCharacters={["#"]}
+        commands={{
+          politician: politicianCommand,
+        }}
+        toolbarCommands={[
+          ["header", "bold", "italic", "strikethrough"],
+          ["link", "quote", "code"],
+          ["unordered-list", "ordered-list", "checked-list"],
+          ["politician"],
+        ]}
+      />
       <Button variant="outlined" color="primary" onClick={handleClickOpen}>
         Save
       </Button>

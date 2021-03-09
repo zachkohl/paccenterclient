@@ -1,6 +1,9 @@
-import ReporterPage from "../components/reports/ReporterPage";
-import ReactMde from "react-mde";
-import ReactMarkdown from "react-markdown";
+import dynamic from "next/dynamic";
+
+const ReporterPage = dynamic(
+  () => import("../components/reports/ReporterPage"),
+  { ssr: false }
+);
 
 function ReporterPageTop() {
   return <ReporterPage />;
