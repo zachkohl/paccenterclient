@@ -1,18 +1,19 @@
 import axios from "axios";
 import btoa from "btoa";
 import getEmail from "../../../lib/apiHelpers/getEmail";
-export default async (req, res) => {
+async function submitReport(req, res, counter = 0) {
   try {
     const date = new Date();
     const dateTime = date.toISOString();
     //console.log();
 
-    const fileName = req.body.fileName + ".md";
+    const fileName =
+      req.body.fileName + counter > 0 ? counter.toString() : "" + ".md";
 
     const email = await getEmail(req.body.userName, req.body.password);
-
-    const response = await axios.post(
-      `https://debBot:oo$C$NIweTJ9@bonner.hopto.org/api/v1/repos/zachk/demo/contents/${fileName}`,
+    //bonner.hopto.org/SITREPS/vault.git
+    https: const response = await axios.post(
+      `https://${req.body.userName}:${req.body.password}@bonner.hopto.org/SITREPS/vault/contents/${fileName}`,
       {
         author: {
           email: email,
@@ -41,6 +42,12 @@ export default async (req, res) => {
     res.send("save complete");
   } catch (err) {
     console.log(err);
-    res.send(err);
+    if (counter < 5) {
+      submitReport(req, res, counter + 1);
+    }
+    res.send(
+      "Error. Check your credentials. Also the filename needs to be unique, so try adding random numbers to the end"
+    );
   }
-};
+}
+export default submitReport;
