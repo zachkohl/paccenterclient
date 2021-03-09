@@ -8,8 +8,8 @@ async function submitReport(req, res, counter = 0) {
     //console.log();
 
     const fileName =
-      req.body.fileName + counter > 0 ? counter.toString() : "" + ".md";
-
+      req.body.fileName + (counter > 0 ? counter.toString() : "") + ".md";
+    console.log(fileName);
     const email = await getEmail(req.body.userName, req.body.password);
     const adddress = `https://${req.body.userName}:${req.body.password}@bonner.hopto.org/SITREPS/vault/contents/${fileName}`;
     const response = await axios.post(
@@ -41,7 +41,7 @@ async function submitReport(req, res, counter = 0) {
 
     res.send("save complete");
   } catch (err) {
-    console.log(err);
+    //  console.log(err);
     if (counter < 5) {
       submitReport(req, res, counter + 1);
     } else {
