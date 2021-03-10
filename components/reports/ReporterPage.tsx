@@ -149,11 +149,22 @@ function reporterPage() {
       {
         value: {
           isOrganization: true,
-          meetings: [{ value: "example value", label: "meeting" }],
+          meetings: [
+            {
+              value: {
+                isMeeting: true,
+                politicians: [
+                  "Steve_Bradshaw",
+                  "Jeff_Connolly",
+                  "Dan_McDonald",
+                ],
+              },
+              label: "meeting",
+            },
+          ],
         },
         label: "Board_of_Commissioners",
       },
-      { value: "strawberry", label: "Bonnery County" },
     ],
   };
 
