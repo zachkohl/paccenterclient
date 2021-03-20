@@ -12,6 +12,12 @@ import Select from "react-select";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
+import {
+  juristiction,
+  organization,
+  meeting,
+} from "./juristictionsOrgsMeetings/juristictionTypes";
+import juristictions from "./juristictionsOrgsMeetings/juristictions";
 
 function reporterPage() {
   const useStyles = makeStyles((theme: Theme) =>
@@ -25,7 +31,6 @@ function reporterPage() {
     })
   );
 
-  const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
 
   const handlePopoverOpen = (
@@ -53,21 +58,21 @@ function reporterPage() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [fileName, setFileName] = useState("");
-  const [juristiction, setJuristiction] = useState({
+  const [juristiction, setJuristiction] = useState<juristiction>({
     value: {
       isJuristiction: false,
       organizations: [],
     },
     label: "",
   });
-  const [organization, setOrganization] = useState({
+  const [organization, setOrganization] = useState<organization>({
     value: {
       isOrganization: false,
       meetings: [],
     },
     label: "",
   });
-  const [meeting, setMeeting] = useState({
+  const [meeting, setMeeting] = useState<meeting>({
     value: {
       isMeeting: false,
       politicians: [],
@@ -114,64 +119,6 @@ function reporterPage() {
     });
     alert(response.data);
   }
-
-  const Sandpoint = {
-    isJuristiction: true,
-    organizations: [
-      {
-        value: {
-          isOrganization: true,
-          meetings: [
-            {
-              value: {
-                isMeeting: true,
-                politicians: [
-                  "Shannon_Sherman",
-                  "Deb_Ruehle",
-                  "Joel_Aispuro",
-                  "John_Darling",
-                  "Kate_McAlister",
-                  "Andy_Groat",
-                ],
-              },
-              label: "meeting",
-            },
-          ],
-        },
-        label: "City_Council",
-      },
-    ],
-  };
-
-  const BonnerCounty = {
-    isJuristiction: true,
-    organizations: [
-      {
-        value: {
-          isOrganization: true,
-          meetings: [
-            {
-              value: {
-                isMeeting: true,
-                politicians: [
-                  "Steve_Bradshaw",
-                  "Jeff_Connolly",
-                  "Dan_McDonald",
-                ],
-              },
-              label: "meeting",
-            },
-          ],
-        },
-        label: "Board_of_Commissioners",
-      },
-    ],
-  };
-
-  const jurisdictions = [
-    { value: Sandpoint, label: "Sandpoint" },
-    { value: BonnerCounty, label: "Bonnery County" },
-  ];
 
   function loadSuggestions(text): Promise<Suggestion[]> {
     return new Promise((accept, reject) => {
@@ -264,7 +211,7 @@ function reporterPage() {
       <label>
         Select Juristiction
         <Select
-          options={jurisdictions}
+          options={juristictions}
           onChange={(option) => setJuristiction(option)}
           instanceId="1"
         />
