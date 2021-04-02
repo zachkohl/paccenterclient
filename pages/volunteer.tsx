@@ -87,8 +87,6 @@ function VolunteerSignupPage() {
         <div style={{ margin: "10px" }}>
           <div style={{ margin: "5px" }}>
             <label>
-              I am willing to potentially serve as an elected official (everyone
-              should check this box)
               <input
                 type="checkbox"
                 checked={potentialCandidate}
@@ -99,6 +97,8 @@ function VolunteerSignupPage() {
                   setPotentialCandidate(!potentialCandidate);
                 }}
               ></input>
+              I am willing to potentially serve as an elected official (everyone
+              should check this box){" "}
             </label>
           </div>
           {potentialCandidate && (
