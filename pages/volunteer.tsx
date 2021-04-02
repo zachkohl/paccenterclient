@@ -97,7 +97,7 @@ function VolunteerSignupPage() {
                   setPotentialCandidate(!potentialCandidate);
                 }}
               ></input>
-              I am willing to potentially serve as an elected official (everyone
+              I am potentially willing serve as an elected official (everyone
               should check this box){" "}
             </label>
           </div>
