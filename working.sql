@@ -57,43 +57,6 @@
 --   'Voted/NotVoted': 'VOTED'
 -- }
 
--- create table kcdatadump2(
--- id integer primary key,
--- voterid integer,
--- last varchar(255),
--- first varchar(255),
--- m varchar(100),
--- suffic varchar(100),
--- streetnum varchar(255),
--- street varchar(255),
--- unitnum VARCHAR(255),
--- add_2 VARCHAR(255),
--- add_3 VARCHAR(255),
--- City VARCHAR(255),
--- st VARCHAR(255),
--- zip VARCHAR(255),
--- zipplus VARCHAR(255),
--- mstreetnum VARCHAR(255),
--- mstreet VARCHAR(255),
--- munit VARCHAR(255),
--- madd_2 VARCHAR(255),
--- madd_3 VARCHAR(255),
--- mcity VARCHAR(255),
--- mst VARCHAR(255),
--- mzip VARCHAR(255),
--- mziplus VARCHAR(255),
--- mcountry VARCHAR(255),
--- gender VARCHAR(255),
--- age VARCHAR(255),
--- currregdate VARCHAR(255),
--- phone VARCHAR(255),
--- ld VARCHAR(255),
--- affil VARCHAR(255),
--- pct VARCHAR(255),
--- electiondate VARCHAR(255),
--- votednotvoted VARCHAR(255),
--- geog geography(POINT),
--- bingdump jsonb,--drop table kcdatadump2;
 
 
 
@@ -213,6 +176,22 @@
 -- );
 
 
+create table volunteerSignup(
+uuid uuid DEFAULT uuid_generate_v4 (),
+last varchar(255),
+first varchar(255),
+street varchar(255),
+City VARCHAR(255),
+State VARCHAR(255),
+zip VARCHAR(255),
+phone VARCHAR(255),
+email VARCHAR(255),
+willingToServeAsCandiate BOOLEAN,
+geog geography(POINT),
+googleDump jsonb,
+singupDate TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+   PRIMARY KEY (uuid)
+)
 
 
 -- CREATE TABLE KCADDRESSES AS 
@@ -230,3 +209,44 @@
 -- zipplus,
 -- bingdump 
 -- FROM kcdatadump2;
+
+--     create table kcdatadump3(
+-- id serial PRIMARY KEY,
+-- voterid integer,--       row["﻿Voter ID"],
+-- last varchar(255),--       row["Last"],
+-- first varchar(255),--        row["First"],
+-- m varchar(100),--      row["M"],
+-- suffic varchar(100),--     row["Suffix"],
+-- streetnum varchar(255),--    row["Street #"],
+-- street varchar(255),--     row["Street"],
+-- unitnum VARCHAR(255),--     row["Unit #"],
+-- add_2 VARCHAR(255),--          row["Add. 2"],
+-- add_3 VARCHAR(255),--   row["Add. 3"],
+-- City VARCHAR(255),--          row["City"],
+-- zip VARCHAR(255),--     row["Zip"],
+-- st VARCHAR(255),--   row["St."],
+-- zipplus VARCHAR(255),--          row["Zip+"],
+-- mstreetnum VARCHAR(255),--     row["M. Street #"],
+-- mstreet VARCHAR(255),--     row["M. Street"],
+-- munit VARCHAR(255),--   row["M. Unit"],
+-- madd_2 VARCHAR(255),--     row["M. Add. 2"],
+-- madd_3 VARCHAR(255),--    row["M. Add. 3"],
+-- mcity VARCHAR(255),--          row["M. City"],
+-- mst VARCHAR(255),--  row["M. St."],
+-- mzip VARCHAR(255),--          row["M. Zip"],
+-- mziplus VARCHAR(255),--        row["M. Zip+"],
+-- mcountry VARCHAR(255),--    row["M.Country"],
+-- gender VARCHAR(255),--       row["Gender"],
+-- age VARCHAR(255),--      row[""],
+-- currregdate VARCHAR(255),--     row["Curr.Reg.Date"],
+-- phone VARCHAR(255),--          row["Phone"],
+-- ld VARCHAR(255),--        row["L.D."],
+-- affil VARCHAR(255),--     row["Affil."],
+-- pct VARCHAR(255),-- row["Pct."],
+-- electiondate VARCHAR(255),--   row["Election Date"],
+-- election VARCHAR(255),--   row["Election "],
+-- votednotvoted VARCHAR(255),--      row["Voted/NotVoted"],
+-- geog geography(POINT),--     geoString,
+-- bingdump jsonb,--     JSON.stringify(blob),
+-- csvdump jsonb-- JSON.stringify(row),
+-- );
