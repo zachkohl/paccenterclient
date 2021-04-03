@@ -17,20 +17,20 @@ export default async (req, res) => {
 
     const address = `${street} ${city} ${state}`;
 
-    const response = await axios.get(
-      "https://maps.googleapis.com/maps/api/geocode/json",
-      {
-        params: {
-          key: process.env.GOOGLEKEY,
-          address: address,
-        },
-      }
-    );
-
     let text = "";
     let values = [];
 
-    if (response.data.results.length > 0) {
+    if (potentialCandidate) {
+      const response = await axios.get(
+        "https://maps.googleapis.com/maps/api/geocode/json",
+        {
+          params: {
+            key: process.env.GOOGLEKEY,
+            address: address,
+          },
+        }
+      );
+
       const result = response.data.results[0];
       const geometry = result.geometry;
       console.log(geometry);
