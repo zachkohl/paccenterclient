@@ -35,6 +35,7 @@ export default async (req, res) => {
       const geometry = result.geometry;
       console.log(geometry);
       const lat = geometry.location.lat;
+
       const lng = geometry.location.lng;
       const geoString = `SRID=4326; POINT(${lng} ${lat})`;
 

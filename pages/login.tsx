@@ -1,7 +1,7 @@
 import Login from "../components/Login";
 
 function LoginPage(props) {
-  return <Login />;
+  return <Login/>
 }
 
 export default LoginPage;
