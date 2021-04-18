@@ -1,8 +1,13 @@
 # paccenterclient
-A geospacial tool that uses real time updates from web hooks
+A hot mess of various projects that bring friends together and help save the world
 
 
 We need to build this out so that it is easy to add plugins.
+
+## big ideas
+this project started with the goal of being a campaign management platform, it is rapidly turning into a project for interfacing with locally hosted systems used for information gathering by citizens to build distributed data stores. Call me for more details. 
+
+## Original vision: Campaign management
 
 We want a way to manage campaigns. Each campaign then gets its own admins who manage their volunteers. Volunteers get access to specific tools for their campaign.
 
@@ -17,16 +22,16 @@ There should also be a mobile app that allows visiting voters with realtime upda
 
 There should also be a feature for delivering signs to voters who have requested one. 
 
+## othe notes:
 
-
-## Vision for "running" feature
+### Vision for "running" feature
 1. We need a way to get maps from arcGIS pro into the maps table
    1. https://support.esri.com/en/technical-article/000002438
    2. 
 2. Put in maps for key races
 3. Prepare map search process (for getting more maps)
 
-## How to get ArcGISPro maps into database
+### How to get ArcGISPro maps into database
 1. Download ARcGISPro file from government website
 2. Open in ArcGISPro
    1. Convert to shape file and save on harddrive (see https://support.esri.com/en/technical-article/000002438)
