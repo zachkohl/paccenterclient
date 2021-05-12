@@ -23,11 +23,11 @@ export default NextAuth({
         // submitted and returns either a object representing a user or value
         // that is false/null if the credentials are invalid.
         // e.g. return { id: 1, name: 'J Smith', email: 'jsmith@example.com' }
-
         //const response = await axios.get(`https://${credentials.username}:${credentials.password}@bonner.hopto.org/api/v1/user`)
 
-        console.log("hello world");
-
+        const adddress = `https://${req.body.userName}:${req.body.password}@bonner.hopto.org/api/v1/user`;
+        const response = await axios.post(adddress);
+        console.log(response.data);
         const userPayload =
           credentials.password === "y" && credentials.username === "x"
             ? { id: 1, name: "Zach", email: "zach.kohl@protonmail.com" }
