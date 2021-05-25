@@ -14,9 +14,9 @@ export default function Users(props) {
         password: password,
       })
       .then(function (response) {
-        if (response.data === "complete") {
+        if (response.data.message === "complete") {
           Router.push({
-            pathname: "/dashboard",
+            pathname: "/",
           });
         }
       });
