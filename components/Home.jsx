@@ -26,7 +26,7 @@ export default function Home(props) {
 
         <p>
           {" "}
-          <a href="/index">Home</a>{" "}
+          <a href="/calendar">Calendar</a>{" "}
         </p>
         <p>
           {" "}
