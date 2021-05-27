@@ -17,7 +17,7 @@ function CalendarUpdatePage(props) {
 
   return (
     <div>
-      <h1>Event Creation Tool</h1>
+      <h1>Add volunteer or question to event</h1>
       <label>
         Event Name:
         <input value={name} onChange={(e) => setName(e.target.value)} />
