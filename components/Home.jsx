@@ -33,6 +33,10 @@ export default function Home(props) {
             above is the link to the pac calendar. Please subscribe to it with
             your phone or other software
           </p>
+          <p>
+            {"Also: check out the web version! "}
+            <a href="/calendar">Calendar</a>{" "}
+          </p>
           {!isLoggedIn && (
             <div>
               <p>
