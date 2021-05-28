@@ -1,4 +1,4 @@
-import react, { useState } from "react";
+import react, { useState, useEffect } from "react";
 import Home from "../components/Home";
 import useUser from "../lib/useUser";
 import axios from "axios";
@@ -12,12 +12,22 @@ function CalendarPage(props) {
   const [title, setTitle] = useState("");
   const [notes, setNotes] = useState("");
   const [uid, setUid] = useState("");
+  const [events, setEvents] = useState([]);
   const toggle = () => setModal(!modal);
   const router = useRouter();
   const { user } = useUser({ redirectTo: "/login" });
   const [name, setName] = useState("");
   if (!user || user.isLoggedIn === false) {
     return <div>loading...</div>;
+  }
+
+  let payload = [];
+  for (let i = 0; i < props.events.length; i++) {
+    payload.push({
+      ...props.events[i],
+      start: new Date(moment.unix(props.events[i].start).toDate()),
+      end: new Date(moment.unix(props.events[i].end).toDate()),
+    });
   }
 
   const localizer = momentLocalizer(moment); // or globalizeLocalizer
@@ -31,12 +41,12 @@ function CalendarPage(props) {
   async function goToHandler() {
     router.push(`/calupdate?uid=${uid}`);
   }
-
+  console.log(props.events);
   return (
     <div>
       <Calendar
         localizer={localizer}
-        events={props.events}
+        events={payload}
         startAccessor="start"
         endAccessor="end"
         style={{ height: "95vh" }}
@@ -73,6 +83,7 @@ CalendarPage.getInitialProps = async (ctx) => {
     key: process.env.pythonapi,
   });
   const events = JSON.parse(response.data.events);
+
   return { ...ctx.query, events: events };
 };
 
