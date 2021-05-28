@@ -15,11 +15,11 @@ function CalendarPage(props) {
   const [events, setEvents] = useState([]);
   const toggle = () => setModal(!modal);
   const router = useRouter();
-  const { user } = useUser({ redirectTo: "/login" });
-  const [name, setName] = useState("");
-  if (!user || user.isLoggedIn === false) {
-    return <div>loading...</div>;
-  }
+  // const { user } = useUser({ redirectTo: "/login" });
+  // const [name, setName] = useState("");
+  // if (!user || user.isLoggedIn === false) {
+  //   return <div>loading...</div>;
+  // }
 
   let payload = [];
   for (let i = 0; i < props.events.length; i++) {
