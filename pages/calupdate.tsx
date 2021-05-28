@@ -23,18 +23,49 @@ function CalendarUpdatePage(props) {
     <div>
       <h1>Add volunteer or question to event</h1>
       <label>
-        Event Name:
+        Name of event attender or text of question:
         <input value={name} onChange={(e) => setName(e.target.value)} />
       </label>
       <div style={{ margin: "100px" }}>
-        <button onClick={submitHandler}>Create event</button>
+        <button onClick={submitHandler}>Submit change</button>
+      </div>
+      <div>
+        <h3>event notes</h3>
+        <p>
+          (This website grabs a fresh copy of the event details and notes on
+          every refresh; your phone only refreshes the notes every 5 minutes or
+          so, keep this in mind if you don't see stuff update on your phone
+          right away)
+        </p>
+        <div
+          style={{
+            border: "1px solid black",
+            display: "inline-block",
+            padding: "20px",
+          }}
+        >
+          <pre>{props.description}</pre>
+        </div>
+      </div>
+      <div>
+        <b>full event details from the ics file</b>
+        <pre>{props.data}</pre>
       </div>
     </div>
   );
 }
 
 CalendarUpdatePage.getInitialProps = async (ctx) => {
-  return { ...ctx.query };
+  const address =
+    process.env.NODE_ENV === "production"
+      ? "https://pythonpacapi.herokuapp.com/getFacts"
+      : "http://localhost:5000/getFacts";
+
+  const response = await axios.post(address, {
+    ...ctx.query,
+    key: process.env.pythonapi,
+  });
+  return { ...ctx.query, ...response.data };
 };
 
 export default CalendarUpdatePage;

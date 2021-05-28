@@ -5,8 +5,8 @@ export default async (req, res) => {
 
   const address =
     process.env.NODE_ENV === "production"
-      ? "https://pythonpacapi.herokuapp.com/create"
-      : "http://localhost:5000/create";
+      ? "https://pythonpacapi.herokuapp.com/upgrade"
+      : "http://localhost:5000/upgrade";
 
   console.log(params);
 
