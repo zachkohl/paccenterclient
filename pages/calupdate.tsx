@@ -1,4 +1,4 @@
-import react, { useState } from "react";
+import react, { useState, useEffect } from "react";
 import Home from "../components/Home";
 import useUser from "../lib/useUser";
 import axios from "axios";
@@ -7,9 +7,8 @@ function CalendarUpdatePage(props) {
   // const { user } = useUser({ redirectTo: "/login" });
   const [name, setName] = useState("");
   const [uid, setUid] = useState(props.uid);
-  // if (!user || user.isLoggedIn === false) {
-  //   return <div>loading...</div>;
-  // }
+  const [data, setData] = useState("");
+  const [description, setDescription] = useState("");
 
   async function submitHandler() {
     const response = await axios.post("/api/calupdate", { name, uid });
@@ -55,17 +54,21 @@ function CalendarUpdatePage(props) {
   );
 }
 
-CalendarUpdatePage.getInitialProps = async (ctx) => {
+export async function getServerSideProps(ctx) {
   const address =
     process.env.NODE_ENV === "production"
       ? "https://pythonpacapi.herokuapp.com/getFacts"
       : "http://localhost:5000/getFacts";
-
-  const response = await axios.post(address, {
-    ...ctx.query,
-    key: process.env.pythonapi,
-  });
-  return { ...ctx.query, ...response.data };
-};
+  try {
+    const response = await axios.post(address, {
+      ...ctx.query,
+      key: process.env.pythonapi,
+    });
+    return { props: { ...ctx.query, ...response.data } };
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+}
 
 export default CalendarUpdatePage;

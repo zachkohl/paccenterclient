@@ -72,7 +72,7 @@ function CalendarPage(props) {
   );
 }
 
-CalendarPage.getInitialProps = async (ctx) => {
+export async function getServerSideProps(ctx) {
   const address =
     process.env.NODE_ENV === "production"
       ? "https://pythonpacapi.herokuapp.com/getAll"
@@ -84,7 +84,7 @@ CalendarPage.getInitialProps = async (ctx) => {
   });
   const events = JSON.parse(response.data.events);
 
-  return { ...ctx.query, events: events };
-};
+  return { props: { ...ctx.query, events: events } };
+}
 
 export default CalendarPage;
