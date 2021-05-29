@@ -250,3 +250,27 @@ singupDate TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 -- bingdump jsonb,--     JSON.stringify(blob),
 -- csvdump jsonb-- JSON.stringify(row),
 -- );
+
+
+ ALTER TABLE bcvoterregmarch21 add column uid uuid NOT NULL DEFAULT uuid_generate_v1();
+--https://stackoverflow.com/questions/9789736/how-to-implement-a-many-to-many-relationship-in-postgresql
+   create table relationships(
+relationships_uid uuid DEFAULT uuid_generate_v1 (),
+parent uuid,
+child uuid,
+   PRIMARY KEY (uuid)
+)
+
+
+
+   create table points(
+relationships_uid uuid DEFAULT uuid_generate_v1(),
+geog geography(POINT),
+apidump jsonb,
+   PRIMARY KEY (uuid)
+)
+
+
+--had to do some slight modifications to created tables, see above for current version (as of May 29 7:11 am 2021)
+ALTER TABLE relationships 
+RENAME COLUMN uuid TO uid;
