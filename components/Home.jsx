@@ -25,56 +25,56 @@ export default function Home(props) {
       <div>
         <h2>Welcome to PACCENTER!</h2>
 
-        <div>
-          <Link href="https://cal.bonner.hopto.org/user1/eccc554d-2a25-6b9e-ee95-59d96066cea4/">
-            https://cal.bonner.hopto.org/user1/eccc554d-2a25-6b9e-ee95-59d96066cea4/
-          </Link>
-          <p>
-            above is the link to the pac calendar. Please subscribe to it with
-            your phone or other software
-          </p>
-          <p>
-            {"Also: check out the web version! "}
-            <a href="/calendar">Calendar</a>{" "}
-          </p>
-          {!isLoggedIn && (
-            <div>
-              <p>
-                {" "}
-                To view our cool extra tools, please log in using your bonner
-                gitea username and password
-              </p>
-              <a href="/login">Login</a>{" "}
-            </div>
-          )}
-        </div>
-        {isLoggedIn && (
+        {!isLoggedIn && (
           <div>
             <p>
               {" "}
-              <a href="/calendar">Calendar</a>{" "}
+              To view our cool extra tools, please log in using your bonner
+              gitea username and password
             </p>
-            <p>
-              {" "}
-              <a href="/running">Check what districts you are in (BETA)</a>{" "}
-            </p>
-            <p>
-              {" "}
-              <a href="/report">Submit a SITREP for PAC</a>{" "}
-            </p>
-            <p>
-              {" "}
-              <a href="/volunteer">
-                Sign up to help with political campaigns
-              </a>{" "}
-            </p>
-            <p>
-              {" "}
-              <button onClick={logout}>Logout</button>{" "}
-            </p>
+            <a href="/login">Login</a>{" "}
           </div>
         )}
       </div>
+      {isLoggedIn && (
+        <div>
+          <div>
+            <Link href="https://cal.bonner.hopto.org/user1/eccc554d-2a25-6b9e-ee95-59d96066cea4/">
+              https://cal.bonner.hopto.org/user1/eccc554d-2a25-6b9e-ee95-59d96066cea4/
+            </Link>
+            <p>
+              above is the link to the pac calendar. Please subscribe to it with
+              your phone or other software
+            </p>
+            <p>
+              {"Also: check out the web version! "}
+              <a href="/calendar">Calendar</a>{" "}
+            </p>
+          </div>
+          <p>
+            {" "}
+            <a href="/calendar">Calendar</a>{" "}
+          </p>
+          <p>
+            {" "}
+            <a href="/running">Check what districts you are in (BETA)</a>{" "}
+          </p>
+          <p>
+            {" "}
+            <a href="/report">Submit a SITREP for PAC</a>{" "}
+          </p>
+          <p>
+            {" "}
+            <a href="/volunteer">
+              Sign up to help with political campaigns
+            </a>{" "}
+          </p>
+          <p>
+            {" "}
+            <button onClick={logout}>Logout</button>{" "}
+          </p>
+        </div>
+      )}
     </div>
   );
 }
