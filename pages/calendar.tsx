@@ -9,9 +9,6 @@ import { useRouter } from "next/router";
 
 function CalendarPage(props) {
   const { user } = useUser({ redirectTo: "/login" });
-  if (!user || user.isLoggedIn === false) {
-    return <div>loading...</div>;
-  }
 
   const [modal, setModal] = useState(false);
   const [title, setTitle] = useState("");
@@ -47,34 +44,38 @@ function CalendarPage(props) {
     router.push(`/calupdate?uid=${uid}`);
   }
   console.log(props.events);
-  return (
-    <div>
-      <Calendar
-        localizer={localizer}
-        events={payload}
-        startAccessor="start"
-        endAccessor="end"
-        style={{ height: "95vh" }}
-        onSelectEvent={selectHandler}
-      />
+  if (!user || user.isLoggedIn === false) {
+    return <div>loading...</div>;
+  } else {
+    return (
       <div>
-        <Modal isOpen={modal} toggle={toggle}>
-          <ModalHeader toggle={toggle}>{title}</ModalHeader>
-          <ModalBody>
-            <pre>{notes}</pre>
-          </ModalBody>
-          <ModalFooter>
-            <Button color="primary" onClick={goToHandler}>
-              Go to edit details
-            </Button>{" "}
-            <Button color="secondary" onClick={toggle}>
-              Cancel
-            </Button>
-          </ModalFooter>
-        </Modal>
+        <Calendar
+          localizer={localizer}
+          events={payload}
+          startAccessor="start"
+          endAccessor="end"
+          style={{ height: "95vh" }}
+          onSelectEvent={selectHandler}
+        />
+        <div>
+          <Modal isOpen={modal} toggle={toggle}>
+            <ModalHeader toggle={toggle}>{title}</ModalHeader>
+            <ModalBody>
+              <pre>{notes}</pre>
+            </ModalBody>
+            <ModalFooter>
+              <Button color="primary" onClick={goToHandler}>
+                Go to edit details
+              </Button>{" "}
+              <Button color="secondary" onClick={toggle}>
+                Cancel
+              </Button>
+            </ModalFooter>
+          </Modal>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 export async function getServerSideProps(ctx) {

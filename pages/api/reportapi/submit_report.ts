@@ -34,7 +34,7 @@ async function submitReport(req, res, counter = 0) {
             author: dateTime,
             committer: dateTime,
           },
-          message: "string",
+          message: "created via web submission tool",
         },
         {
           auth: {
