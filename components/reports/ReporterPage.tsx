@@ -117,6 +117,7 @@ function reporterPage(props) {
       fileName: fileName,
     });
     alert(response.data);
+    window.location.reload();
   }
 
   function loadSuggestions(text): Promise<Suggestion[]> {
