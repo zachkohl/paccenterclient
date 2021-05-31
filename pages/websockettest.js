@@ -1,6 +1,11 @@
 import React, { useState } from "react";
+import useUser from "../lib/useUser";
 
 function WebSocketTestPage(props) {
+  const { user } = useUser({ redirectTo: "/login" });
+  if (!user || user.isLoggedIn === false) {
+    return <div>loading...</div>;
+  }
   if (typeof window != "undefined") {
     var socket = new WebSocket("ws:localhost:3000");
     const [result, setResult] = useState("");

@@ -19,13 +19,17 @@ async function updateGeo() {
    */
 
   //read 100 addresses
-  let sql = `select * from bcvoterregmarch21 FULL JOIN relationships ON bcvoterregmarch21.bcvoterregmarch21_uid= relationships.parent FULL JOIN points ON relationships.child = points.points_uid ORDER BY "VoterID" Limit 520`;
+  let sql = `select * from bcvoterregmarch21 FULL JOIN relationships ON bcvoterregmarch21.bcvoterregmarch21_uid= relationships.parent FULL JOIN points ON relationships.child = points.points_uid ORDER BY "VoterID"`;
   let values = [];
   const dbResponse = await db.query(sql, values);
   let errorFlag = false;
   for (let i = 0; i < dbResponse.rows.length; i++) {
     const row = dbResponse.rows[i];
-    const address = `${row.ResHouseNumber} ${row.ResPreDir} ${row.ResStreet}, ${row.ResCityDesc} ${row.ResState}, ${row.ResZip5}`;
+    const address = `${row.ResHouseNumber ? row.ResHouseNumber : ""} ${
+      row.ResPreDir ? row.ResPreDir : ""
+    } ${row.ResStreet ? row.ResStreet : ""}, ${
+      row.ResCityDesc ? row.ResCityDesc : ""
+    } ${row.ResState ? row.ResState : ""}, ${row.ResZip5 ? row.ResZip5 : ""}`;
     console.log(`${row.FirstName} ${row.LastName}: ${address}`);
     if (row.geog === null) {
       console.log("no geography: row", i);

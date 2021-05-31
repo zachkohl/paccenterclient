@@ -1,45 +1,48 @@
 const db = require("../../lib/postgresSetup");
 const axios = require("axios");
+import withSession from "../../lib/session";
+export default withSession(async (req, res) => {
+  const user = req.session.get("user");
 
-export default async (req, res) => {
-  try {
-    console.log(req.body);
-    const {
-      firstName,
-      lastName,
-      phone,
-      potentialCandidate,
-      street,
-      city,
-      state,
-      zip,
-    } = req.body;
+  if (user) {
+    try {
+      console.log(req.body);
+      const {
+        firstName,
+        lastName,
+        phone,
+        potentialCandidate,
+        street,
+        city,
+        state,
+        zip,
+      } = req.body;
 
-    const address = `${street} ${city} ${state}`;
+      const address = `${street} ${city} ${state}`;
 
-    let text = "";
-    let values = [];
+      let text = "";
+      let values = [];
 
-    if (potentialCandidate) {
-      const response = await axios.get(
-        "https://maps.googleapis.com/maps/api/geocode/json",
-        {
-          params: {
-            key: process.env.GOOGLEKEY,
-            address: address,
-          },
-        }
-      );
+      if (potentialCandidate) {
+        const response = await axios.get(
+          "https://maps.googleapis.com/maps/api/geocode/json",
+          {
+            params: {
+              key: process.env.GOOGLEKEY,
+              address: address,
+            },
+          }
+        );
 
-      const result = response.data.results[0];
-      const geometry = result.geometry;
-      console.log(geometry);
-      const lat = geometry.location.lat;
+        const result = response.data.results[0];
+        const geometry = result.geometry;
+        console.log(geometry);
+        const lat = geometry.location.lat;
 
-      const lng = geometry.location.lng;
-      const geoString = `SRID=4326; POINT(${lng} ${lat})`;
+        const lng = geometry.location.lng;
+        const geoString = `SRID=4326; POINT(${lng} ${lat})`;
 
-      text = `
+        text = `
       INSERT INTO volunteerSignup(
         first,
         last,
@@ -54,26 +57,26 @@ export default async (req, res) => {
         )
       VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
       RETURNING *;`;
-      values = [
-        firstName,
-        lastName,
-        phone,
-        potentialCandidate,
-        street,
-        city,
-        state,
-        zip,
-        geoString,
-        result,
-      ];
-      const getUser = await db.query(text, values);
-      if (getUser === null) {
-        res.send("fail");
-        return;
-      }
-      res.send("complete");
-    } else {
-      text = `
+        values = [
+          firstName,
+          lastName,
+          phone,
+          potentialCandidate,
+          street,
+          city,
+          state,
+          zip,
+          geoString,
+          result,
+        ];
+        const getUser = await db.query(text, values);
+        if (getUser === null) {
+          res.send("fail");
+          return;
+        }
+        res.send("complete");
+      } else {
+        text = `
       INSERT INTO volunteerSignup(
         first,
         last,
@@ -86,25 +89,28 @@ export default async (req, res) => {
         )
       VALUES($1,$2,$3,$4,$5,$6,$7,$8)
       RETURNING *;`;
-      values = [
-        firstName,
-        lastName,
-        phone,
-        potentialCandidate,
-        street,
-        city,
-        state,
-        zip,
-      ];
-      const getUser = await db.query(text, values);
-      if (getUser === null) {
-        res.send("fail");
-        return;
+        values = [
+          firstName,
+          lastName,
+          phone,
+          potentialCandidate,
+          street,
+          city,
+          state,
+          zip,
+        ];
+        const getUser = await db.query(text, values);
+        if (getUser === null) {
+          res.send("fail");
+          return;
+        }
+        res.send("complete");
       }
-      res.send("complete");
+    } catch (err) {
+      console.log(err);
+      res.send(err);
     }
-  } catch (err) {
-    console.log(err);
-    res.send(err);
+  } else {
+    res.send("access denied");
   }
-};
+});

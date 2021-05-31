@@ -1,8 +1,13 @@
 import { useState, useRef, useEffect } from "react";
+import useUser from "../lib/useUser";
 
 import axios from "axios";
 
 function VolunteerSignupPage() {
+  const { user } = useUser({ redirectTo: "/login" });
+  if (!user || user.isLoggedIn === false) {
+    return <div>loading...</div>;
+  }
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");

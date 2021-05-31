@@ -18,8 +18,9 @@ import {
   meeting,
 } from "./juristictionsOrgsMeetings/juristictionTypes";
 import juristictions from "./juristictionsOrgsMeetings/juristictions";
+import withSession from "../../lib/session";
 
-function reporterPage() {
+function reporterPage(props) {
   const useStyles = makeStyles((theme: Theme) =>
     createStyles({
       popover: {
@@ -52,9 +53,7 @@ function reporterPage() {
   const [selectedDay, setSelectedDay] = useState(null);
   const [selectedTab, setSelectedTab] = useState("write" as mdeMode);
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(
-    "**Replace this with your meeting notes. Be sure to play with the # symbol!**"
-  );
+  const [value, setValue] = useState("");
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [fileName, setFileName] = useState("");
@@ -141,7 +140,7 @@ function reporterPage() {
             value: "#keyissue4",
           },
         ].filter((i) => i.preview.toLowerCase().includes(text.toLowerCase()));
-        accept((suggestions as unknown) as Promise<Suggestion[]>);
+        accept(suggestions as unknown as Promise<Suggestion[]>);
       }, 100);
     });
   }
@@ -154,7 +153,6 @@ function reporterPage() {
 
   useEffect(() => {
     const list = meeting.value.politicians.map((politician) => {
-      console.log(politician);
       return (
         <li key={politician} onClick={(e) => handlePolitician(politician)}>
           {politician}
@@ -196,7 +194,6 @@ function reporterPage() {
       textOp.current = opts;
     },
   };
-
   return (
     <div>
       <h1>Situation Report</h1>
@@ -211,11 +208,12 @@ function reporterPage() {
       <label>
         Select Juristiction
         <Select
-          options={juristictions}
+          options={props.records}
           onChange={(option) => setJuristiction(option)}
           instanceId="1"
         />
       </label>
+      <br />
       {juristiction.value.isJuristiction && (
         <label>
           Select organization
@@ -226,6 +224,7 @@ function reporterPage() {
           />
         </label>
       )}
+      <br />
       {organization.value.isOrganization && (
         <label>
           Select meeting

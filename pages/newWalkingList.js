@@ -1,5 +1,6 @@
 import auth from "../lib/auth";
 import dynamic from "next/dynamic";
+import useUser from "../lib/useUser";
 
 const DynamicComponentWithNoSSR = dynamic(
   () => import("../components/NewWalkingList/NewWalkingList"),
@@ -8,6 +9,10 @@ const DynamicComponentWithNoSSR = dynamic(
   }
 );
 export default function NewWalkingListPage(props) {
+  const { user } = useUser({ redirectTo: "/login" });
+  if (!user || user.isLoggedIn === false) {
+    return <div>loading...</div>;
+  }
   return <DynamicComponentWithNoSSR />;
 }
 

@@ -23,6 +23,8 @@
     "bcrypt": "^4.0.1",
     "bootstrap": "^4.5.0",
     "btoa": "^1.2.1",
+    "csv": "^5.5.0",
+    "csv-parse": "^4.15.4",
     "dotenv": "^8.2.0",
     "fast-csv": "^4.3.6",
     "js-cookie": "^2.2.1",

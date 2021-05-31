@@ -1,18 +1,21 @@
 const db = require("../../lib/postgresSetup");
+import withSession from "../../lib/session";
 
-export default async (req, res) => {
-  try {
-    const signupname = req.body.signupname;
-    const signupemail = req.body.signupemail;
-    const signupphone = req.body.signupphone;
-    const signupaddress1 = req.body.signupaddress1;
-    const signupaddress2 = req.body.signupaddress2;
-    const signupcity = req.body.signupcity;
-    const signupcounty = req.body.signupcounty;
-    const signupstate = req.body.signupstate;
-    const signupzip = req.body.signupzip;
+export default withSession(async (req, res) => {
+  const user = req.session.get("user");
+  if (user) {
+    try {
+      const signupname = req.body.signupname;
+      const signupemail = req.body.signupemail;
+      const signupphone = req.body.signupphone;
+      const signupaddress1 = req.body.signupaddress1;
+      const signupaddress2 = req.body.signupaddress2;
+      const signupcity = req.body.signupcity;
+      const signupcounty = req.body.signupcounty;
+      const signupstate = req.body.signupstate;
+      const signupzip = req.body.signupzip;
 
-    let text = `
+      let text = `
       INSERT INTO signup(
       signup_name,
       signup_email,
@@ -24,34 +27,30 @@ export default async (req, res) => {
       signup_state,
       signup_zip)
       VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)
-      RETURNING *;`
-      ;
+      RETURNING *;`;
+      let values = [
+        signupname,
+        signupemail,
+        signupphone,
+        signupaddress1,
+        signupaddress2,
+        signupcity,
+        signupcounty,
+        signupstate,
+        signupzip,
+      ];
 
-    let values = [
-      signupname,
-      signupemail, 
-      signupphone,
-      signupaddress1,
-      signupaddress2,
-      signupcity,
-      signupcounty,
-      signupstate,
-      signupzip];
-      
-      
-    const getUser = await db.query(text, values);
+      const getUser = await db.query(text, values);
       if (getUser === null) {
-      res.send("fail");
-      return;
+        res.send("fail");
+        return;
+      }
+      res.send("complete");
+    } catch (err) {
+      console.log(err);
+      res.send(err);
     }
-    res.send("complete");
+  } else {
+    res.send("access denied");
   }
-
-  catch (err) {
-    console.log(err);
-    res.send(err);
-  }
-
-};
-
-
+});

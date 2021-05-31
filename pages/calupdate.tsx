@@ -4,7 +4,10 @@ import useUser from "../lib/useUser";
 import axios from "axios";
 
 function CalendarUpdatePage(props) {
-  // const { user } = useUser({ redirectTo: "/login" });
+  const { user } = useUser({ redirectTo: "/login" });
+  if (!user || user.isLoggedIn === false) {
+    return <div>loading...</div>;
+  }
   const [name, setName] = useState("");
   const [uid, setUid] = useState(props.uid);
   const [data, setData] = useState("");

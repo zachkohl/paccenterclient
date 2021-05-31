@@ -1,19 +1,26 @@
 const db = require("../../lib/postgresSetup");
 const axios = require("axios");
-export default async (req, res) => {
-  const params = req.body;
+import withSession from "../../lib/session";
 
-  const address =
-    process.env.NODE_ENV === "production"
-      ? "https://pythonpacapi.herokuapp.com/upgrade"
-      : "http://localhost:5000/upgrade";
+export default withSession(async (req, res) => {
+  const user = req.session.get("user");
+  if (user) {
+    const params = req.body;
 
-  console.log(params);
+    const address =
+      process.env.NODE_ENV === "production"
+        ? "https://pythonpacapi.herokuapp.com/upgrade"
+        : "http://localhost:5000/upgrade";
 
-  const response = await axios.post(address, {
-    ...params,
-    key: process.env.pythonapi,
-  });
-  console.log(response.data);
-  res.send(response.data);
-};
+    console.log(params);
+
+    const response = await axios.post(address, {
+      ...params,
+      key: process.env.pythonapi,
+    });
+    console.log(response.data);
+    res.send(response.data);
+  } else {
+    res.send("access denied");
+  }
+});

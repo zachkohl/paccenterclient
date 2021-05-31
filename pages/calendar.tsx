@@ -8,6 +8,11 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { useRouter } from "next/router";
 
 function CalendarPage(props) {
+  const { user } = useUser({ redirectTo: "/login" });
+  if (!user || user.isLoggedIn === false) {
+    return <div>loading...</div>;
+  }
+
   const [modal, setModal] = useState(false);
   const [title, setTitle] = useState("");
   const [notes, setNotes] = useState("");
