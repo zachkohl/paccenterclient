@@ -274,3 +274,29 @@ apidump jsonb,
 --had to do some slight modifications to created tables, see above for current version (as of May 29 7:11 am 2021)
 ALTER TABLE relationships 
 RENAME COLUMN uuid TO uid;
+
+--show on map all the voters
+select * from bcvoterregmarch21 FULL JOIN relationships ON bcvoterregmarch21.bcvoterregmarch21_uid= relationships.parent FULL JOIN points ON relationships.child = points.points_uid ORDER BY "VoterID";
+
+
+
+   create table visits(
+visits_uid uuid DEFAULT uuid_generate_v1(),
+voter_uid uuid NOT NULL,
+survey_uid uuid NOT NULL,
+notes jsonb,
+UNIQUE (voter_uid,survey_uid),
+   PRIMARY KEY (visits_uid)
+)
+
+   create table surveys(
+survey_uid uuid DEFAULT uuid_generate_v1(),
+created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+name VARCHAR  UNIQUE NOT NULL,
+data jsonb,
+   PRIMARY KEY (survey_uid)
+)
+
+
+--show all visis of a given survey
+select * from visits FULL JOIN relationships ON voter_uid= relationships.parent FULL JOIN points ON relationships.child = points.points_uid WHERE  survey_uid = "bb8ed562-c269-11eb-bb4d-0ec9ee39a1c1";
