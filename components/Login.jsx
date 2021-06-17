@@ -18,6 +18,10 @@ export default function Users(props) {
           Router.push({
             pathname: "/",
           });
+        } else {
+          alert("Invalid username or password");
+          setUsername("");
+          setPassword("");
         }
       });
   };
