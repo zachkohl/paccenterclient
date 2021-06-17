@@ -1,9 +1,9 @@
 const db = require("../../../lib/postgresSetup");
 import withSession from "../../../lib/session";
+import checkPermission from "../../../lib/checkPermission";
 export default withSession(async (req, res) => {
-  const user = req.session.get("user");
-
-  if (user) {
+  const check = await checkPermission(req, "dev");
+  if (check) {
     try {
       let text = `SELECT DISTINCT ON (geog) ST_AsGeoJson(geog) AS geog,id AS pointid from kcdatadump2 WHERE pct='1'`;
       let values = [];

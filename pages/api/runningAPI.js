@@ -3,9 +3,8 @@ const axios = require("axios");
 import withSession from "../../lib/session";
 
 export default withSession(async (req, res) => {
-  const user = req.session.get("user");
-
-  if (user) {
+  const check = await checkPermission(req, "districtLookup");
+  if (check) {
     const response = await axios.get(
       "https://maps.googleapis.com/maps/api/geocode/json",
       {

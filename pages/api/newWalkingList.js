@@ -1,9 +1,8 @@
 const db = require("../../lib/postgresSetup");
 import withSession from "../../lib/session";
 export default withSession(async (req, res) => {
-  const user = req.session.get("user");
-
-  if (user) {
+  const check = await checkPermission(req, "dev");
+  if (check) {
     try {
       let text = `INSERT INTO WalkingLists(NAME,NEXTVISIT) VALUES($1,$2)`;
       let values = [req.body.name, 1];

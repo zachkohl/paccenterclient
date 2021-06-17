@@ -1,10 +1,11 @@
 const db = require("../../lib/postgresSetup");
 const axios = require("axios");
+import checkPermission from "../../lib/checkPermission";
 import withSession from "../../lib/session";
 export default withSession(async (req, res) => {
-  const user = req.session.get("user");
   const params = req.body;
-  if (user) {
+  const check = await checkPermission(req, "calendar");
+  if (check) {
     const address =
       process.env.NODE_ENV === "production"
         ? "https://pythonpacapi.herokuapp.com/update"

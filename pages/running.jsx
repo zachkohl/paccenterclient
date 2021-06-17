@@ -1,15 +1,15 @@
-import Signup from "../components/Signup";
+import Running from "../components/Running";
 import useUser from "../lib/useUser";
 
-function SignupPage(props) {
+function RunningPage(props) {
   const { user } = useUser({
     redirectTo: "/login",
-    permission: "volunteer",
+    permission: "districtLookup",
   });
   if (!user || user.isLoggedIn === false) {
     return <div>loading...</div>;
   }
-  return <Signup />;
+  return <Running />;
 }
 
-export default SignupPage;
+export default RunningPage;

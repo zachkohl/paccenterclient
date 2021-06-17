@@ -2,8 +2,8 @@ const db = require("../../lib/postgresSetup");
 import withSession from "../../lib/session";
 
 export default withSession(async (req, res) => {
-  const user = req.session.get("user");
-  if (user) {
+  const check = await checkPermission(req, "dev");
+  if (check) {
     const walkingListId = req.body.walkingListId;
     const pointId = req.body.pointId;
     console.log(`walkinglistid: ${walkingListId}`);

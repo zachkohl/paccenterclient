@@ -3,6 +3,7 @@ const file = fs.readFileSync("./Elected Offices.csv");
 const parse = require("csv-parse/lib/sync");
 const _ = require("lodash");
 import withSession from "../../lib/session";
+import checkPermission from "../../lib/checkPermission";
 import {
   juristiction,
   organization,
@@ -80,11 +81,9 @@ for (let i = 0; i < areas.length; i++) {
   payload.push(area);
 }
 
-console.log(jurisdictions);
 export default withSession(async (req, res) => {
-  const user = req.session.get("user");
-
-  if (user) {
+  const check = await checkPermission(req, "report");
+  if (check) {
     res.send(payload);
   } else {
     res.send("access denied");

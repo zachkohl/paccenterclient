@@ -1,10 +1,13 @@
 import axios from "axios";
 import btoa from "btoa";
 import getEmail from "../../../lib/apiHelpers/getEmail";
+import checkPermission from "../../../lib/checkPermission";
 import withSession from "../../../lib/session";
 async function submitReport(req, res, counter = 0) {
-  const user = req.session.get("user");
-  if (user) {
+  const check = await checkPermission(req, "report");
+
+  if (check) {
+    const user = req.session.get("user");
     try {
       const date = new Date();
       const dateTime = date.toISOString();
@@ -13,33 +16,33 @@ async function submitReport(req, res, counter = 0) {
       const fileName =
         req.body.fileName + (counter > 0 ? counter.toString() : "") + ".md";
       console.log(fileName);
-      const email = await getEmail(req.body.userName, req.body.password);
+      //  const email = await getEmail(req.body.userName, req.body.password);
       //`https://debBot:oo$C$NIweTJ9@bonner.hopto.org/api/v1/repos/zachk/demo/contents/${fileName}`,
-
-      const adddress = `https://${req.body.userName}:${req.body.password}@bonner.hopto.org/api/v1/repos/SITREPS/vault/contents/${fileName}`;
+      const message = `created via web submission tool by user:${user.username}`;
+      const adddress = `https://paccenterbot:${process.env.paccenterbot}@git.bonner.hopto.org/api/v1/repos/pac/workspace/contents/${fileName}`;
       const response = await axios.post(
         adddress,
         {
           author: {
-            email: email,
+            email: "paccenter@protonmail.com",
             name: req.body.userName,
           },
           branch: "master",
           committer: {
-            email: email,
-            name: req.body.userName,
+            email: "paccenter@protonmail.com",
+            name: user.username,
           },
           content: btoa(req.body.markdown),
           dates: {
             author: dateTime,
             committer: dateTime,
           },
-          message: "created via web submission tool",
+          message: message,
         },
         {
           auth: {
-            username: req.body.userName,
-            password: req.body.password,
+            username: "paccenterbot",
+            password: process.env.paccenterbot,
           },
         }
       );

@@ -4,7 +4,7 @@ import useUser from "../lib/useUser";
 import axios from "axios";
 
 function VolunteerSignupPage() {
-  const { user } = useUser({ redirectTo: "/login" });
+  const { user } = useUser({ redirectTo: "/login", permission: "volunteer" });
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");

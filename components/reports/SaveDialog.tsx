@@ -21,7 +21,7 @@ function SaveDialog(props) {
       open={props.open}
     >
       <DialogTitle id="simple-dialog-title">
-        Enter sever credentials
+        Are you sure you are ready to submit?{" "}
       </DialogTitle>
       {props.children}
     </Dialog>

@@ -265,14 +265,6 @@ function reporterPage(props) {
         Save
       </Button>
       <SaveDialog open={open} onClose={handleClose}>
-        Username:
-        <input value={userName} onChange={(e) => setUserName(e.target.value)} />
-        Password:
-        <input
-          value={password}
-          type="password"
-          onChange={(e) => setPassword(e.target.value)}
-        />
         <br />
         <Button onClick={push}>Submit</Button>
       </SaveDialog>

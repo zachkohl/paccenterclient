@@ -4,7 +4,7 @@ import useUser from "../lib/useUser";
 import axios from "axios";
 
 function CalUpgradePage(props) {
-  const { user } = useUser({ redirectTo: "/login" });
+  const { user } = useUser({ redirectTo: "/login", permission: "calendar" });
   const [name, setName] = useState("");
   if (!user || user.isLoggedIn === false) {
     return <div>loading...</div>;

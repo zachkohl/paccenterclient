@@ -1,8 +1,8 @@
 const db = require("../../lib/postgresSetup");
 
 export default withSession(async (req, res) => {
-  const user = req.session.get("user");
-  if (user) {
+  const check = await checkPermission(req, "dev");
+  if (check) {
     try {
       let text = `SELECT * from walkinglists`;
       let values = [];

@@ -1,10 +1,10 @@
 const db = require("../../lib/postgresSetup");
 const axios = require("axios");
+import checkPermission from "../../lib/checkPermission";
 import withSession from "../../lib/session";
 export default withSession(async (req, res) => {
-  const user = req.session.get("user");
-
-  if (user) {
+  const check = await checkPermission(req, "volunteer");
+  if (check) {
     try {
       console.log(req.body);
       const {

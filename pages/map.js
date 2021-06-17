@@ -6,7 +6,7 @@ const DynamicComponentWithNoSSR = dynamic(() => import("../components/map"), {
   ssr: false,
 });
 export default function MapPage(props) {
-  const { user } = useUser({ redirectTo: "/login" });
+  const { user } = useUser({ redirectTo: "/login", permission: "dev" });
   if (!user || user.isLoggedIn === false) {
     return <div>loading...</div>;
   }

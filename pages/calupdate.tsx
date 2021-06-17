@@ -4,15 +4,14 @@ import useUser from "../lib/useUser";
 import axios from "axios";
 
 function CalendarUpdatePage(props) {
-  const { user } = useUser({ redirectTo: "/login" });
-  if (!user || user.isLoggedIn === false) {
-    return <div>loading...</div>;
-  }
   const [name, setName] = useState("");
   const [uid, setUid] = useState(props.uid);
   const [data, setData] = useState("");
   const [description, setDescription] = useState("");
-
+  const { user } = useUser({ redirectTo: "/login", permission: "calendar" });
+  if (!user || user.isLoggedIn === false) {
+    return <div>loading...</div>;
+  }
   async function submitHandler() {
     const response = await axios.post("/api/calupdate", { name, uid });
     if (response) {

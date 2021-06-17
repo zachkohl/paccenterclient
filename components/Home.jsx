@@ -14,7 +14,6 @@ export default function Home(props) {
       setIsLoggedIn(user.isLoggedIn);
     }
   }, [user]);
-
   async function logout() {
     const response = await axios.get("/api/logout");
     window.location.reload();
@@ -38,37 +37,47 @@ export default function Home(props) {
       </div>
       {isLoggedIn && (
         <div>
-          <div>
-            <Link href="https://cal.bonner.hopto.org/user1/eccc554d-2a25-6b9e-ee95-59d96066cea4/">
-              https://cal.bonner.hopto.org/user1/eccc554d-2a25-6b9e-ee95-59d96066cea4/
-            </Link>
+          {user.permissions["calendar"] && (
+            <div>
+              <Link href="https://cal.bonner.hopto.org/user1/eccc554d-2a25-6b9e-ee95-59d96066cea4/">
+                https://cal.bonner.hopto.org/user1/eccc554d-2a25-6b9e-ee95-59d96066cea4/
+              </Link>
+              <p>
+                above is the link to the pac calendar. Please subscribe to it
+                with your phone or other software
+              </p>
+              <p>
+                {"This is the link to browser based calendar "}
+                <a href="/calendar">Calendar</a>{" "}
+              </p>
+            </div>
+          )}
+          {user.permissions["districtLookup"] && (
             <p>
-              above is the link to the pac calendar. Please subscribe to it with
-              your phone or other software
+              {" "}
+              <a href="/running">Check what districts you are in (BETA)</a>{" "}
             </p>
+          )}
+          {user.permissions["report"] && (
             <p>
-              {"Also: check out the web version! "}
-              <a href="/calendar">Calendar</a>{" "}
+              {" "}
+              <a href="/report">Submit a SITREP for PAC</a>{" "}
             </p>
-          </div>
-          <p>
-            {" "}
-            <a href="/calendar">Calendar</a>{" "}
-          </p>
-          <p>
-            {" "}
-            <a href="/running">Check what districts you are in (BETA)</a>{" "}
-          </p>
-          <p>
-            {" "}
-            <a href="/report">Submit a SITREP for PAC</a>{" "}
-          </p>
-          <p>
-            {" "}
-            <a href="/volunteer">
-              Sign up to help with political campaigns
-            </a>{" "}
-          </p>
+          )}
+          {user.permissions["volunteer"] && (
+            <p>
+              {" "}
+              <a href="/volunteer">
+                Sign up to help with political campaigns
+              </a>{" "}
+            </p>
+          )}
+          {user.permissions["admin"] && (
+            <p>
+              {" "}
+              <a href="/admin">Administer paccenter accounts</a>{" "}
+            </p>
+          )}
           <p>
             {" "}
             <button onClick={logout}>Logout</button>{" "}
