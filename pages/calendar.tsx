@@ -8,7 +8,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { useRouter } from "next/router";
 
 function CalendarPage(props) {
-  const { user } = useUser({ redirectTo: "/login" });
+  const { user } = useUser({ redirectTo: "/login", permission: "calendar" });
 
   const [modal, setModal] = useState(false);
   const [title, setTitle] = useState("");
@@ -19,9 +19,9 @@ function CalendarPage(props) {
   const router = useRouter();
   // const { user } = useUser({ redirectTo: "/login" });
   // const [name, setName] = useState("");
-  // if (!user || user.isLoggedIn === false) {
-  //   return <div>loading...</div>;
-  // }
+  if (!user || user.isLoggedIn === false) {
+    return <div>loading...</div>;
+  }
 
   let payload = [];
   for (let i = 0; i < props.events.length; i++) {

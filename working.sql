@@ -300,3 +300,15 @@ data jsonb,
 
 --show all visis of a given survey
 select * from visits FULL JOIN relationships ON voter_uid= relationships.parent FULL JOIN points ON relationships.child = points.points_uid WHERE  survey_uid = "bb8ed562-c269-11eb-bb4d-0ec9ee39a1c1";
+
+
+
+   create table users(
+user_uid uuid DEFAULT uuid_generate_v1(),
+created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+username VARCHAR  UNIQUE NOT NULL,
+hash VARCHAR NOT NULL,
+permissions jsonb,
+notes VARCHAR,
+   PRIMARY KEY (user_uid)
+)

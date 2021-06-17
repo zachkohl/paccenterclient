@@ -1,5 +1,5 @@
 import react, { useState, useRef, useEffect, useReducer } from "react";
-const db = require("../../lib/postgresSetup");
+// const db = require("../../lib/postgresSetup");
 import useUser from "../../lib/useUser";
 import { DataGrid } from "@material-ui/data-grid";
 
@@ -84,27 +84,27 @@ function VisitsPage(props) {
 }
 
 export async function getServerSideProps(ctx) {
-  const uid = ctx.params.uid;
-  let text = `select "FirstName","LastName","ResHouseNumber","ResPreDir","ResStreet","ResCityDesc","ResState","ResZip5",visits_uid as "id","notes" from bcvoterregmarch21 JOIN visits ON bcvoterregmarch21_uid=voter_uid WHERE survey_uid=$1 ORDER BY "ResStreet" ASC, "ResPreDir" ASC, "ResHouseNumber" ASC`;
-  let values = [uid];
-  const dbResponse = await db.query(text, values);
+  // const uid = ctx.params.uid;
+  // let text = `select "FirstName","LastName","ResHouseNumber","ResPreDir","ResStreet","ResCityDesc","ResState","ResZip5",visits_uid as "id","notes" from bcvoterregmarch21 JOIN visits ON bcvoterregmarch21_uid=voter_uid WHERE survey_uid=$1 ORDER BY "ResStreet" ASC, "ResPreDir" ASC, "ResHouseNumber" ASC`;
+  // let values = [uid];
+  // const dbResponse = await db.query(text, values);
 
-  const visits = dbResponse.rows.map((visit) => {
-    const address = `${visit.ResHouseNumber ? visit.ResHouseNumber : ""} ${
-      visit.ResPreDir ? visit.ResPreDir : ""
-    } ${visit.ResStreet ? visit.ResStreet : ""}, ${
-      visit.ResCityDesc ? visit.ResCityDesc : ""
-    } ${visit.ResState ? visit.ResState : ""}, ${
-      visit.ResZip5 ? visit.ResZip5 : ""
-    }`;
-    const name = `${visit.FirstName ? visit.FirstName : ""} ${
-      visit.LastName ? visit.LastName : ""
-    }`;
-    const notes = visit.notes == null ? "" : visit.notes;
-    return { address, name, notes };
-  });
+  // const visits = dbResponse.rows.map((visit) => {
+  //   const address = `${visit.ResHouseNumber ? visit.ResHouseNumber : ""} ${
+  //     visit.ResPreDir ? visit.ResPreDir : ""
+  //   } ${visit.ResStreet ? visit.ResStreet : ""}, ${
+  //     visit.ResCityDesc ? visit.ResCityDesc : ""
+  //   } ${visit.ResState ? visit.ResState : ""}, ${
+  //     visit.ResZip5 ? visit.ResZip5 : ""
+  //   }`;
+  //   const name = `${visit.FirstName ? visit.FirstName : ""} ${
+  //     visit.LastName ? visit.LastName : ""
+  //   }`;
+  //   const notes = visit.notes == null ? "" : visit.notes;
+  //   return { address, name, notes };
+  // });
 
-  return { props: { visits: visits } };
+  return { props: { visits: [] } };
 }
 
 export default VisitsPage;

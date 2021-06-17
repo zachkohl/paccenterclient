@@ -9,7 +9,14 @@ const ReporterPage = dynamic(
 );
 
 function ReporterPageTop(props) {
-  const { user } = useUser({ redirectTo: "/login" });
+  // return (
+  //   <div>
+  //     This tool has been moved to another website. Please see your group leader
+  //     for more information.
+  //   </div>
+  // );
+
+  const { user } = useUser({ redirectTo: "/login", permission: "report" });
   const [name, setName] = useState("");
 
   const [data, setData] = useState(null);

@@ -1,18 +1,50 @@
-import withSession from '../../lib/session'
+import withSession from "../../lib/session";
+import db from "../../lib/postgresSetup";
 
 export default withSession(async (req, res) => {
-  const user = req.session.get('user')
-
+  const user = req.session.get("user");
+  const permission = req.query.permission;
+  console.log(user);
   if (user) {
-    // in a real world application you might read the user id from the session and then do a database request
-    // to get more information on the user if needed
-    res.json({
-      isLoggedIn: true,
-      ...user,
-    })
+    const text = `select permissions from users where user_uid=$1`;
+    const values = [user.user_uid];
+    const response = await db.query(text, values);
+    console.log(permission);
+    if (response.rows == 0) {
+      res.json({
+        isLoggedIn: false,
+      });
+      return;
+    }
+
+    if (permission) {
+      const permissions = response.rows[0].permissions;
+      const authorized = permissions[permission];
+      if (authorized) {
+        res.json({
+          isLoggedIn: true,
+          authorized: true,
+          permissions: permissions,
+          ...user,
+        });
+      } else {
+        res.json({
+          isLoggedIn: true,
+          authorized: false,
+          permissions: permissions,
+          ...user,
+        });
+      }
+    } else {
+      res.json({
+        isLoggedIn: true,
+        permissions: permissions,
+        ...user,
+      });
+    }
   } else {
     res.json({
       isLoggedIn: false,
-    })
+    });
   }
-})
+});

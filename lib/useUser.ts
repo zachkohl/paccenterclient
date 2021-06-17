@@ -5,15 +5,19 @@ import useSWR from "swr";
 export type useUserType = {
   redirectTo?: string;
   redirectIfFound?: string;
+  permission?: string;
 };
 
 export default function useUser(
   props: useUserType = {
     redirectTo: undefined,
     redirectIfFound: undefined,
+    permission: undefined,
   }
 ) {
-  const { data: user, mutate: mutateUser } = useSWR("/api/user");
+  const { data: user, mutate: mutateUser } = useSWR(
+    `/api/user?permission=${props.permission}`
+  );
 
   useEffect(() => {
     // if no redirect needed, just return (example: already on /dashboard)
@@ -27,6 +31,9 @@ export default function useUser(
       (props.redirectIfFound && user?.isLoggedIn)
     ) {
       Router.push(props.redirectTo);
+    }
+    if (user?.authorized == false) {
+      Router.push("/unauthorized");
     }
   }, [user, props.redirectIfFound, props.redirectTo]);
 
