@@ -54,6 +54,15 @@ function CalendarPage(props) {
           endAccessor="end"
           style={{ height: "95vh" }}
           onSelectEvent={selectHandler}
+          eventPropGetter={(event) => {
+            if (event.description.includes("attending:")) {
+              return {
+                style: {
+                  backgroundColor: "green",
+                },
+              };
+            }
+          }}
         />
         <div>
           <Modal isOpen={modal} toggle={toggle}>
