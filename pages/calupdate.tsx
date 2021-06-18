@@ -4,7 +4,8 @@ import useUser from "../lib/useUser";
 import axios from "axios";
 
 function CalendarUpdatePage(props) {
-  const [name, setName] = useState("");
+  const [attender, setAttender] = useState("");
+  const [question, setQuestion] = useState("");
   const [uid, setUid] = useState(props.uid);
   const [data, setData] = useState("");
   const [description, setDescription] = useState("");
@@ -12,8 +13,26 @@ function CalendarUpdatePage(props) {
   if (!user || user.isLoggedIn === false) {
     return <div>loading...</div>;
   }
-  async function submitHandler() {
-    const response = await axios.post("/api/calupdate", { name, uid });
+  async function submitQuestionHandler() {
+    const payload = "question: " + question;
+
+    const response = await axios.post("/api/calupdate", {
+      name: payload,
+      uid,
+    });
+    if (response) {
+      alert("event updated");
+      window.location.reload();
+    }
+  }
+
+  async function submitAttenderHandler() {
+    const payload = "attending: " + attender;
+
+    const response = await axios.post("/api/calupdate", {
+      name: payload,
+      uid,
+    });
     if (response) {
       alert("event updated");
       window.location.reload();
@@ -24,11 +43,18 @@ function CalendarUpdatePage(props) {
     <div>
       <h1>Add volunteer or question to event</h1>
       <label>
-        Name of event attender or text of question:
-        <input value={name} onChange={(e) => setName(e.target.value)} />
+        Add attender
+        <input value={attender} onChange={(e) => setAttender(e.target.value)} />
       </label>
-      <div style={{ margin: "100px" }}>
-        <button onClick={submitHandler}>Submit change</button>
+      <div style={{ margin: "10px" }}>
+        <button onClick={submitAttenderHandler}>Submit Attender</button>
+      </div>
+      <label>
+        Add question
+        <input value={question} onChange={(e) => setQuestion(e.target.value)} />
+      </label>
+      <div style={{ margin: "10px" }}>
+        <button onClick={submitQuestionHandler}>Submit Question</button>
       </div>
       <div>
         <h3>event notes</h3>
