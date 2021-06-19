@@ -1,5 +1,5 @@
 import react, { useState, useEffect } from "react";
-// const db = require("../../lib/postgresSetup");
+const db = require("../../lib/postgresSetup");
 import useUser from "../../lib/useUser";
 import { DataGrid } from "@material-ui/data-grid";
 
@@ -62,13 +62,13 @@ function VisitsPage(props) {
 }
 
 export async function getServerSideProps(ctx) {
-  // // let text = `select "FirstName","LastName","ResHouseNumber","ResPreDir","ResStreet","ResCityDesc","ResState","ResZip5",visits_uid as "id" from bcvoterregmarch21 JOIN visits ON bcvoterregmarch21_uid=voter_uid WHERE survey_uid=$1`;
-  // let text = `select "FirstName","LastName","ResHouseNumber","ResPreDir","ResStreet","ResCityDesc","ResState","ResZip5" from bcvoterregmarch21`;
+  // let text = `select "FirstName","LastName","ResHouseNumber","ResPreDir","ResStreet","ResCityDesc","ResState","ResZip5",visits_uid as "id" from bcvoterregmarch21 JOIN visits ON bcvoterregmarch21_uid=voter_uid WHERE survey_uid=$1`;
+  let text = `select "FirstName","LastName","ResHouseNumber","ResPreDir","ResStreet","ResCityDesc","ResState","ResZip5" from bcvoterregmarch21`;
 
-  // let values = [];
-  // //  let values = [uid];
-  // const dbResponse = await db.query(text, values);
-  return { props: { visits: [] } };
+  let values = [];
+  //  let values = [uid];
+  const dbResponse = await db.query(text, values);
+  return { props: { visits: dbResponse.rows } };
 }
 
 export default VisitsPage;

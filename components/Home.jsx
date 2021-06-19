@@ -61,15 +61,13 @@ export default function Home(props) {
           {user.permissions["report"] && (
             <p>
               {" "}
-              <a href="/report">Submit a SITREP for PAC</a>{" "}
+              <a href="/report">Submit meeting or event notes</a>{" "}
             </p>
           )}
           {user.permissions["volunteer"] && (
             <p>
               {" "}
-              <a href="/volunteer">
-                Sign up to help with political campaigns
-              </a>{" "}
+              <a href="/volunteer">Volunteer</a>{" "}
             </p>
           )}
           {user.permissions["admin"] && (

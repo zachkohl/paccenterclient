@@ -22,7 +22,7 @@ export default withSession(async (req, res) => {
       res.json({ user: user, message: "complete" });
     }
   } catch (error) {
-    console.log("inside login catch block, about to send error");
-    res.status(500).json(error);
+    console.log(error);
+    res.send("error");
   }
 });

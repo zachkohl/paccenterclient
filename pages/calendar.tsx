@@ -64,6 +64,11 @@ function CalendarPage(props) {
             }
           }}
         />
+        <p>
+          If you have any questions, need a meeting added to the calendar, or
+          need to cancel meeting attendance, please email
+          jackmeyers@sudomail.com
+        </p>
         <div>
           <Modal isOpen={modal} toggle={toggle}>
             <ModalHeader toggle={toggle}>{title}</ModalHeader>

@@ -23,6 +23,9 @@ export default function Users(props) {
           setUsername("");
           setPassword("");
         }
+      })
+      .catch(() => {
+        alert("Invalid username or password");
       });
   };
 
