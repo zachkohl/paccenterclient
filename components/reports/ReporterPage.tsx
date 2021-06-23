@@ -9,7 +9,6 @@ import axios from "axios";
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
 import DatePicker from "react-modern-calendar-datepicker";
 import Select from "react-select";
-import Typography from "@material-ui/core/Typography";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
 import {
@@ -17,9 +16,8 @@ import {
   organization,
   meeting,
 } from "./juristictionsOrgsMeetings/juristictionTypes";
-import juristictions from "./juristictionsOrgsMeetings/juristictions";
-import withSession from "../../lib/session";
 
+import validator from "validator";
 function reporterPage(props) {
   const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -108,6 +106,13 @@ function reporterPage(props) {
         );
         return;
       }
+    }
+
+    if (!validator.isAscii(value)) {
+      alert(
+        "Your report has non Ascii characters, which are not allowed. Please remove any special, strange, characters and try again."
+      );
+      return;
     }
 
     const response = await axios.post("/api/reportapi/submit_report", {
