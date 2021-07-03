@@ -1,7 +1,6 @@
 import db from "./postgresSetup";
 
 async function checkPermission(req, permission) {
-  console.log("inside check permission");
   const user = req.session.get("user");
   const text = `select permissions from users where user_uid=$1`;
   const values = [user.user_uid];

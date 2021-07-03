@@ -16,7 +16,6 @@ function ReporterPageTop(props) {
 
   async function getData() {
     const response = await axios.get("./api/politicianapi");
-    console.log(response.data);
     setData(response.data);
   }
   useEffect(() => {

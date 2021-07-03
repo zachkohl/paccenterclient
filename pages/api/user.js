@@ -8,7 +8,6 @@ export default withSession(async (req, res) => {
     const text = `select permissions from users where user_uid=$1`;
     const values = [user.user_uid];
     const response = await db.query(text, values);
-    console.log(permission);
     if (response.rows == 0) {
       res.json({
         isLoggedIn: false,

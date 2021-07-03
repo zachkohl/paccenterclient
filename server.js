@@ -18,12 +18,6 @@ app.prepare().then(() => {
     handle(req, res, parsedUrl);
   });
 
-  //const ws = new WebSocket.Server({ server });
-
-  // const websocketConfig = require("./websocketConfig");
-  // console.log(typeof websocketConfig);
-  // websocketConfig(ws);
-
   server.listen(PORT, (err) => {
     if (err) throw err;
     console.log("> Ready on http://localhost:3000");

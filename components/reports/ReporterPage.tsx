@@ -30,6 +30,14 @@ function reporterPage(props) {
     })
   );
 
+  type Payload = {
+    markdown: String;
+    userName: String;
+    password: String;
+    fileName: String;
+    file?: Object;
+  };
+
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
 
   const handlePopoverOpen = (
@@ -55,6 +63,7 @@ function reporterPage(props) {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [fileName, setFileName] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
   const [juristiction, setJuristiction] = useState<juristiction>({
     value: {
       isJuristiction: false,
@@ -108,19 +117,29 @@ function reporterPage(props) {
       }
     }
 
-    if (!validator.isAscii(value)) {
+    if (!validator.isAscii(value) && value != "") {
       alert(
         "Your report has non Ascii characters, which are not allowed. Please remove any special, strange, characters and try again."
       );
       return;
     }
 
-    const response = await axios.post("/api/reportapi/submit_report", {
+    let payload: Payload = {
       markdown: value,
       userName: userName,
       password: password,
       fileName: fileName,
-    });
+    };
+
+    const formData = new FormData();
+    if (selectedFile) {
+      formData.append("file", selectedFile, selectedFile.name);
+    }
+    formData.append("fileName", fileName);
+    formData.append("markdown", value);
+    payload.file = formData;
+
+    const response = await axios.post("/api/reportapi/submit_report", formData);
     alert(response.data);
     window.location.reload();
   }
@@ -165,7 +184,6 @@ function reporterPage(props) {
         </li>
       );
     });
-    console.log(list);
     politicians.current = list;
   }, [meeting]);
 
@@ -200,6 +218,11 @@ function reporterPage(props) {
       textOp.current = opts;
     },
   };
+
+  async function onFileChange(e) {
+    setSelectedFile(e.target.files[0]);
+  }
+
   return (
     <div>
       <h1>Situation Report</h1>
@@ -246,6 +269,10 @@ function reporterPage(props) {
         filename:
         <input value={fileName} onChange={(e) => setFileName(e.target.value)} />
       </label>
+      <div>
+        <h6>upload audio file</h6>
+        <input type="file" onChange={onFileChange} />
+      </div>
       <ReactMde
         value={value}
         onChange={setValue}
