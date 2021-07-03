@@ -38,7 +38,7 @@ async function submitReport(req, res,) {
         if (fields.markdown && fields.markdown != "") {
           console.log('files', files)
           console.log('fields', fields)
-       //   saveMarkdownReport(fields.markdown, fields.fileName,user, 0);
+         saveMarkdownReport(fields.markdown, fields.fileName,user, 0);
 
         }
       
