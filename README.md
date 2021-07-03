@@ -48,3 +48,13 @@ There should also be a feature for delivering signs to voters who have requested
    4. Click Import
 4. Verify new table in PGAdmin or other tool. The importer should have built a new table with the name of the shapefile.
 5. Move this table into the maps table by using a the moveMap script that is part of this repository. Make sure to update the ./utils/moveToMapsTable file with the correct name and source variables before running. 
+
+
+# Calendar
+              <Link href="https://cal.bonner.hopto.org/user1/eccc554d-2a25-6b9e-ee95-59d96066cea4/">
+                https://cal.bonner.hopto.org/user1/eccc554d-2a25-6b9e-ee95-59d96066cea4/
+              </Link>
+              <p>
+                above is the link to the pac calendar. Please subscribe to it
+                with your phone or other software
+              </p>

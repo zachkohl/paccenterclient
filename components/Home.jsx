@@ -39,13 +39,6 @@ export default function Home(props) {
         <div>
           {user.permissions["calendar"] && (
             <div>
-              <Link href="https://cal.bonner.hopto.org/user1/eccc554d-2a25-6b9e-ee95-59d96066cea4/">
-                https://cal.bonner.hopto.org/user1/eccc554d-2a25-6b9e-ee95-59d96066cea4/
-              </Link>
-              <p>
-                above is the link to the pac calendar. Please subscribe to it
-                with your phone or other software
-              </p>
               <p>
                 {"This is the link to browser based calendar "}
                 <a href="/calendar">Calendar</a>{" "}
