@@ -9,6 +9,7 @@ const permissions = {
   districtLookup: false,
   surveys: false,
   volunteer: false,
+  files:false,
   admin: false,
 };
 

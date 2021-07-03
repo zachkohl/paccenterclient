@@ -38,7 +38,7 @@ async function submitReport(req, res,) {
         if (fields.markdown && fields.markdown != "") {
           console.log('files', files)
           console.log('fields', fields)
-         // saveMarkdownReport(fields.markdown, fields.fileName,user, 0);
+       //   saveMarkdownReport(fields.markdown, fields.fileName,user, 0);
 
         }
       
@@ -55,15 +55,20 @@ async function submitReport(req, res,) {
 
 async function saveFile(file, name,counter) {
   try {
-    const fileName =
-      name + (counter > 0 ? counter.toString() : "");
 
+const original = file.name;
+const [originalname,filetype] = original.split('.');
+
+    let fileName =
+      name + (counter > 0 ? counter.toString() : "");
+fileName = fileName + "." + filetype;
 var fileStream = fs.createReadStream(file.path);
 var fileStat = fs.stat(file.path,( function(error2, stats){
   if(error2){
     console.log(error2)
     throw new Error(error2)
   }
+
   minioClient.putObject('meetings', fileName, fileStream, stats.size, function(err3, objInfo) {
     if(err3) {
         return console.log(err3) // err should be null
