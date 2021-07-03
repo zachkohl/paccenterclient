@@ -8,7 +8,7 @@ function CalendarUpdatePage(props) {
   const [question, setQuestion] = useState("");
   const [uid, setUid] = useState(props.uid);
   const [data, setData] = useState("");
-  const [description, setDescription] = useState("");
+  const [description, setDescription] = useState(props.description);
   const { user } = useUser({ redirectTo: "/login", permission: "calendar" });
   if (!user || user.isLoggedIn === false) {
     return <div>loading...</div>;
@@ -31,6 +31,19 @@ function CalendarUpdatePage(props) {
 
     const response = await axios.post("/api/calupdate", {
       name: payload,
+      uid,
+    });
+    if (response) {
+      alert("event updated");
+      window.location.reload();
+    }
+  }
+
+  async function updateDescription() {
+    const payload = description;
+
+    const response = await axios.post("/api/calDescriptionUpdate", {
+      newDescription: payload,
       uid,
     });
     if (response) {
@@ -71,7 +84,11 @@ function CalendarUpdatePage(props) {
             padding: "20px",
           }}
         >
-          <pre>{props.description}</pre>
+          <textarea
+            onChange={(e) => setDescription(e.target.value)}
+            value={description}
+          />
+          <button onClick={updateDescription}>update description</button>
         </div>
       </div>
       <div>
