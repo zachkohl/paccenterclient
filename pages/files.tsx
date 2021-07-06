@@ -4,15 +4,15 @@ import useUser from "../lib/useUser";
 
 import { useRouter } from "next/router";
 import axios from "axios";
+import React from "react";
+import Link from "next/link";
 
 function FilesPage(props) {
   const [files, setFiles] = useState([]);
   const { user } = useUser({ redirectTo: "/login", permission: "files" });
 
   async function getFiles() {
-    console.log("gets");
     const response = await axios.get("./api/listFiles");
-    console.log(typeof response.data);
     if (typeof response.data === "object") {
       setFiles(response.data);
     } else {
@@ -27,7 +27,13 @@ function FilesPage(props) {
 
   const fileLinks = files.map((file) => {
     console.log(file);
-    return <li key={file.name}>{file.name}</li>;
+    return (
+      <li key={file.name}>
+        <Link href={`./api/file/${file.name}`}>
+          <a>{file.name}</a>
+        </Link>
+      </li>
+    );
   });
 
   if (!user || user.isLoggedIn === false) {
@@ -36,6 +42,9 @@ function FilesPage(props) {
     return (
       <div style={{ marginLeft: "10px" }}>
         <h1>Files</h1>
+        <p>
+          to save a file, please right click the link and select "save link as"
+        </p>
         <ul>{fileLinks}</ul>
       </div>
     );
