@@ -26,22 +26,29 @@ async function listFileLinks(req, res,) {
     const check = await checkPermission(req, "files");
     if (check) {
       const { fileName } = req.query;
-      
+
         try {
 console.log('listFIles hit')
-          const links = await  minioClient.getObject('meetings', fileName)
-         
-         console.log(links.length)
-          
-          var rangePreTrim = req.rawHeaders.findIndex((header)=> header==='Range')>0?req.rawHeaders[req.rawHeaders.findIndex((header)=> header==='Range')+1]:"";
-
-const range = rangePreTrim?.replace("bytes=","").split('-');
-
+const stats =  await  minioClient.statObject('meetings', fileName)
+const dataStream = await  minioClient.getObject('meetings', fileName)
+if(fileName.split('.')[1]!='mp3'){
+    dataStream.pipe(res);
+    return;
+}
 
 
+const size = stats.size;
 
 
-          links.pipe(res);
+  
+              console.log('top')
+              res.writeHead(200,{
+                  "accept-Ranges":"bytes",
+                  "Content-Type":"audio/mpeg",
+                  "Content-Length": size
+              })
+              dataStream.pipe(res);
+
 
         } catch (err) {
             console.log("err", err);
