@@ -4,7 +4,7 @@ import getEmail from "../../../lib/apiHelpers/getEmail";
 import checkPermission from "../../../lib/checkPermission";
 import withSession from "../../../lib/session";
 import formidable from "formidable";
-var fs = require('fs');
+var fs = require("fs");
 var Minio = require("minio");
 
 var minioClient = new Minio.Client({
@@ -20,7 +20,7 @@ export const config = {
   },
 };
 
-async function submitReport(req, res,) {
+async function submitReport(req, res) {
   const check = await checkPermission(req, "report");
 
   if (check) {
@@ -31,56 +31,60 @@ async function submitReport(req, res,) {
       form.parse(req, async function (err, fields, files) {
         if (err) return console.log(err);
         if (files.file) {
-          saveFile(files.file, fields.fileName,0);
-
+          console.log("above to start saveFile");
+          saveFile(files.file, fields.fileName, 0);
+          console.log("save File should have been called. This is right below");
         }
 
         if (fields.markdown && fields.markdown != "") {
-          console.log('files', files)
-          console.log('fields', fields)
-         saveMarkdownReport(fields.markdown, fields.fileName,user, 0);
-
+          console.log("files", files);
+          console.log("fields", fields);
+          saveMarkdownReport(fields.markdown, fields.fileName, user, 0);
         }
-      
       });
       res.send("save complete");
     } catch (err) {
       console.log("err", err);
-      res.send(err)
+      res.send(err);
     }
   } else {
     res.send("access denied");
   }
 }
 
-async function saveFile(file, name,counter) {
+async function saveFile(file, name, counter) {
+  console.log("inside save file");
   try {
+    const original = file.name;
+    const [originalname, filetype] = original.split(".");
 
-const original = file.name;
-const [originalname,filetype] = original.split('.');
-
-    let fileName =
-      name + (counter > 0 ? counter.toString() : "");
-fileName = fileName + "." + filetype;
-var fileStream = fs.createReadStream(file.path);
-var fileStat = fs.stat(file.path,( function(error2, stats){
-  if(error2){
-    console.log(error2)
-    throw new Error(error2)
-  }
-
-  minioClient.putObject('meetings', fileName, fileStream, stats.size, function(err3, objInfo) {
-    if(err3) {
-        return console.log(err3) // err should be null
-    }
-    console.log("Success", objInfo)
-}) 
-}))
-  
- } catch (e) {
+    let fileName = name + (counter > 0 ? counter.toString() : "");
+    fileName = fileName + "." + filetype;
+    var fileStream = fs.createReadStream(file.path);
+    var fileStat = fs.stat(file.path, function (error2, stats) {
+      if (error2) {
+        console.log(error2);
+        throw new Error(error2);
+      }
+      console.log("above minioClient line 73");
+      minioClient.putObject(
+        "meetings",
+        fileName,
+        fileStream,
+        stats.size,
+        function (err3, objInfo) {
+          if (err3) {
+            return console.log(err3); // err should be null
+          }
+          console.log("Success", objInfo);
+        }
+      );
+    });
+    console.log("below minIo client");
+  } catch (e) {
     console.log("err", e);
     if (counter < 5) {
-      saveFile(file, name,counter + 1);
+      saveFile(file, name, counter + 1);
     } else {
       throw new Error(
         "Problem saving report. Filename needs to be unique, so try adding random numbers to the end"
@@ -95,8 +99,7 @@ async function saveMarkdownReport(markdown, name, user, counter) {
     const dateTime = date.toISOString();
     //console.log();
 
-    const fileName =
-      name + (counter > 0 ? counter.toString() : "") + ".md";
+    const fileName = name + (counter > 0 ? counter.toString() : "") + ".md";
     //  const email = await getEmail(req.body.userName, req.body.password);
     //`https://debBot:oo$C$NIweTJ9@bonner.hopto.org/api/v1/repos/zachk/demo/contents/${fileName}`,
     const message = `created via web submission tool by user:${user.username}`;
@@ -138,8 +141,5 @@ async function saveMarkdownReport(markdown, name, user, counter) {
     }
   }
 }
-
-
-
 
 export default withSession(submitReport);
