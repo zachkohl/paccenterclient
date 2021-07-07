@@ -4,7 +4,7 @@ import getEmail from "../../../lib/apiHelpers/getEmail";
 import checkPermission from "../../../lib/checkPermission";
 import withSession from "../../../lib/session";
 import formidable from "formidable";
-var fs = require("fs");
+//var fs = require("fs");
 var Minio = require("minio");
 
 var minioClient = new Minio.Client({
@@ -32,7 +32,7 @@ async function submitReport(req, res) {
         if (err) return console.log(err);
         if (files.file) {
           console.log("above to start saveFile");
-          saveFile(files.file, fields.fileName, 0);
+          //saveFile(files.file, fields.fileName, 0);
           console.log("save File should have been called. This is right below");
         }
 
