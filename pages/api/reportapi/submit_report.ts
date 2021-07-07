@@ -50,7 +50,7 @@ async function submitReport(req, res) {
   } else {
     res.send("access denied");
   }
-// }
+}
 
 // async function saveFile(file, name, counter) {
 //   console.log("inside save file");
