@@ -69,6 +69,12 @@ export default function Home(props) {
               <a href="/admin">Administer paccenter accounts</a>{" "}
             </p>
           )}
+          {user.permissions["surveys"] && (
+            <p>
+              {" "}
+              <a href="/surveys">Surveys</a>{" "}
+            </p>
+          )}
           <p>
             {" "}
             <button onClick={logout}>Logout</button>{" "}

@@ -14,7 +14,6 @@ function VisitsPage(props) {
   const columns = [
     { field: "name", title: "Name", editable: "never" },
     { field: "address", title: "Address", editable: "never" },
-    { field: "notes", title: "Notes" },
   ];
 
   if (!user || user.isLoggedIn === false) {
@@ -83,13 +82,97 @@ function VisitsPage(props) {
   }
 }
 
+function comparer(a, b) {
+  if (a.reStreet < b.resStreet) {
+    return -1;
+  } else if (a.reStreet > b.resStreet) {
+    return 1;
+  } else if (a.resHouseNumber < b.resHouseNumber) {
+    return -1;
+  } else if (a.resHouseNumber > b.resHouseNumber) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
+function comparerSortStreets(a, b) {
+  if (a.ResStreet < b.ResStreet) {
+    return -1;
+  } else if (a.ResStreet > b.ResStreet) {
+    return 1;
+  } else if (
+    parseInt(a.ResHouseNumber) % 2 === 0 &&
+    parseInt(b.ResHouseNumber) % 2 != 0
+  ) {
+    return -1;
+  } else if (
+    parseInt(a.ResHouseNumber) % 2 != 0 &&
+    parseInt(b.ResHouseNumber) % 2 === 0
+  ) {
+    return 1;
+  } else if (a.ResHouseNumber < b.ResHouseNumber) {
+    return -1;
+  } else if (a.ResHouseNumber > b.ResHouseNumber) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
 export async function getServerSideProps(ctx) {
   const uid = ctx.params.uid;
-  let text = `select "FirstName","LastName","ResHouseNumber","ResPreDir","ResStreet","ResCityDesc","ResState","ResZip5",visits_uid as "id","notes" from bcvoterregmarch21 JOIN visits ON bcvoterregmarch21_uid=voter_uid WHERE survey_uid=$1 ORDER BY "ResStreet" ASC, "ResPreDir" ASC, "ResHouseNumber" ASC`;
+  let text = `select "FirstName","LastName","ResHouseNumber","ResPreDir","ResStreet","ResCityDesc","ResState","ResZip5",visits_uid as "id","notes" from bcvoterregmarch21 JOIN visits ON bcvoterregmarch21_uid=voter_uid WHERE survey_uid=$1`;
   let values = [uid];
   const dbResponse = await db.query(text, values);
 
-  const visits = dbResponse.rows.map((visit) => {
+  function sortByStreet(rows) {
+    function comparer(a, b) {
+      if (a.ResStreet < b.ResStreet) {
+        return -1;
+      } else if (a.ResStreet > b.ResStreet) {
+        return 1;
+      } else if (
+        parseInt(a.ResHouseNumber) % 2 === 0 &&
+        parseInt(b.ResHouseNumber) % 2 != 0
+      ) {
+        return -1;
+      } else if (
+        parseInt(a.ResHouseNumber) % 2 != 0 &&
+        parseInt(b.ResHouseNumber) % 2 === 0
+      ) {
+        return 1;
+      } else if (
+        parseInt(a.ResHouseNumber) % 2 === 0 &&
+        parseInt(b.ResHouseNumber) % 2 === 0
+      ) {
+        if (a.ResHouseNumber < b.ResHouseNumber) {
+          return -1;
+        } else if (a.ResHouseNumber > b.ResHouseNumber) {
+          return 1;
+        } else {
+          return 0;
+        }
+      } else if (
+        parseInt(a.ResHouseNumber) % 2 != 0 &&
+        parseInt(b.ResHouseNumber) % 2 != 0
+      ) {
+        if (a.ResHouseNumber < b.ResHouseNumber) {
+          return 1;
+        } else if (a.ResHouseNumber > b.ResHouseNumber) {
+          return -1;
+        } else {
+          return 0;
+        }
+      }
+    }
+    const sorted = rows.sort(comparer);
+    return sorted;
+  }
+  //ResHouseNumber
+  const sortedRows = sortByStreet(dbResponse.rows);
+
+  const visits = sortedRows.map((visit) => {
     const address = `${visit.ResHouseNumber ? visit.ResHouseNumber : ""} ${
       visit.ResPreDir ? visit.ResPreDir : ""
     } ${visit.ResStreet ? visit.ResStreet : ""}, ${

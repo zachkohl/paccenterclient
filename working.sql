@@ -274,3 +274,20 @@ apidump jsonb,
 --had to do some slight modifications to created tables, see above for current version (as of May 29 7:11 am 2021)
 ALTER TABLE relationships 
 RENAME COLUMN uuid TO uid;
+
+
+--jobs give a place to store provenance data about an activity
+   create table jobs(
+jobs_uid uuid DEFAULT uuid_generate_v1 (),
+user_uid uuid,
+notes text,
+datetime TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+   PRIMARY KEY (jobs_uid)
+)
+
+
+ALTER TABLE surveys 
+ADD COLUMN job uuid;
+
+
+CREATE TABLE people AS select VoterId, Age, Prefix, FirstName, LastName, Suffix, MiddleName, Gender, bcvoterregmarch21_uid AS people_uid;
