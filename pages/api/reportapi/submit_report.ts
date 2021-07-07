@@ -1,18 +1,17 @@
 import axios from "axios";
 import btoa from "btoa";
-import getEmail from "../../../lib/apiHelpers/getEmail";
 import checkPermission from "../../../lib/checkPermission";
 import withSession from "../../../lib/session";
 import formidable from "formidable";
 //var fs = require("fs");
-var Minio = require("minio");
+// var Minio = require("minio");
 
-var minioClient = new Minio.Client({
-  endPoint: "min.bonner.hopto.org",
-  useSSL: true,
-  accessKey: process.env.minioaccess,
-  secretKey: process.env.miniosecret,
-});
+// var minioClient = new Minio.Client({
+//   endPoint: "min.bonner.hopto.org",
+//   useSSL: true,
+//   accessKey: process.env.minioaccess,
+//   secretKey: process.env.miniosecret,
+// });
 
 export const config = {
   api: {
