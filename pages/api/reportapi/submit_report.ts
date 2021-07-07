@@ -20,35 +20,36 @@ export const config = {
 };
 
 async function submitReport(req, res) {
-  const check = await checkPermission(req, "report");
+  res.send("dev test");
+  // const check = await checkPermission(req, "report");
 
-  if (check) {
-    const user = req.session.get("user");
-    try {
-      //***********************SAVE FILE TO MINIO */
-      const form = new formidable.IncomingForm();
-      form.parse(req, async function (err, fields, files) {
-        if (err) return console.log(err);
-        if (files.file) {
-          console.log("above to start saveFile");
-          //saveFile(files.file, fields.fileName, 0);
-          console.log("save File should have been called. This is right below");
-        }
+  // if (check) {
+  //   const user = req.session.get("user");
+  //   try {
+  //     //***********************SAVE FILE TO MINIO */
+  //     const form = new formidable.IncomingForm();
+  //     form.parse(req, async function (err, fields, files) {
+  //       if (err) return console.log(err);
+  //       if (files.file) {
+  //         console.log("above to start saveFile");
+  //         //saveFile(files.file, fields.fileName, 0);
+  //         console.log("save File should have been called. This is right below");
+  //       }
 
-        if (fields.markdown && fields.markdown != "") {
-          console.log("files", files);
-          console.log("fields", fields);
-          saveMarkdownReport(fields.markdown, fields.fileName, user, 0);
-        }
-      });
-      res.send("save complete");
-    } catch (err) {
-      console.log("err", err);
-      res.send(err);
-    }
-  } else {
-    res.send("access denied");
-  }
+  //       if (fields.markdown && fields.markdown != "") {
+  //         console.log("files", files);
+  //         console.log("fields", fields);
+  //         saveMarkdownReport(fields.markdown, fields.fileName, user, 0);
+  //       }
+  //     });
+  //     res.send("save complete");
+  //   } catch (err) {
+  //     console.log("err", err);
+  //     res.send(err);
+  //   }
+  // } else {
+  //   res.send("access denied");
+  // }
 }
 
 // async function saveFile(file, name, counter) {
