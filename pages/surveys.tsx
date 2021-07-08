@@ -33,6 +33,11 @@ function SurveysPage(props) {
   }
 
   async function createSurvey() {
+    console.log(selectedTemp);
+    if (selectedTemp === "") {
+      alert("please select a template");
+      return;
+    }
     if (surveyName === "") {
       alert("please enter a name");
       return;
@@ -65,7 +70,11 @@ function SurveysPage(props) {
         >
           {templates}
         </select>
-        <button onClick={createNewSurvey}>
+        <button
+          onClick={() => {
+            createNewSurvey();
+          }}
+        >
           Create new survey from template
         </button>
         <ul>{surveys}</ul>

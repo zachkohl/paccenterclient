@@ -291,3 +291,13 @@ ADD COLUMN job uuid;
 
 
 CREATE TABLE people AS select VoterId, Age, Prefix, FirstName, LastName, Suffix, MiddleName, Gender, bcvoterregmarch21_uid AS people_uid;
+
+   create table visits(
+visit_uid uuid DEFAULT uuid_generate_v1 (),
+voter_uid uuid,
+survey_uid uuid,
+notes text,
+visited boolean DEFAULT FALSE,
+job_uid uuid,
+   PRIMARY KEY (visit_uid)
+)

@@ -5,7 +5,7 @@ import checkPermission from "../../../lib/checkPermission";
 import withSession from "../../../lib/session";
 import db from "../../../lib/postgresSetup";
 import templates from '../../../lib/surveyTemplates'
-
+import buildJob from '../../../lib/buildJob';
 
 
 async function newSurvey(req, res,) {
@@ -16,11 +16,7 @@ async function newSurvey(req, res,) {
         try {
 
 //create the job
-const notes = "created survey (dev test in development)";
-const text = `INSERT INTO JOBS (user_uid,notes) VALUES($1,$2) RETURNING *`;
-const values = [user.user_uid,notes];
-const jobQuery = await db.query(text,values);
-const jobUid = jobQuery.rows[0].jobs_uid;
+const jobUid = buildJob('update visit',user)
 
 //build the survey
 const surveyResponse = await db.query("INSERT INTO surveys (job,name) VALUES ($1,$2) RETURNING *",[jobUid,req.body.surveyName])
@@ -34,12 +30,12 @@ const responseGetVisits = await db.query(templateText,[])
 
 //build the visits
 const prototypeNotes = {visited:false}
-let buildVisits = `INSERT INTO visits (voter_uid,survey_uid,notes) VALUES `;
+let buildVisits = `INSERT INTO visits (voter_uid,survey_uid,job_uid) VALUES `;
 for(let i=0;i<responseGetVisits.rows.length;i++){
-    buildVisits = buildVisits + `('${responseGetVisits.rows[i].bcvoterregmarch21_uid}', '${surveyUid}','${JSON.stringify(prototypeNotes)}'), `
+    buildVisits = buildVisits + `('${responseGetVisits.rows[i].bcvoterregmarch21_uid}', '${surveyUid}','${jobUid}'), `
 }
 buildVisits = buildVisits.slice(0,-2) + ';'
-console.log(buildVisits)
+
 
 
 //run it
