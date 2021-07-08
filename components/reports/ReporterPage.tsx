@@ -124,24 +124,41 @@ function reporterPage(props) {
       return;
     }
 
-    let payload: Payload = {
-      markdown: value,
-      userName: userName,
-      password: password,
-      fileName: fileName,
-    };
-
-    const formData = new FormData();
     if (selectedFile) {
-      formData.append("file", selectedFile, selectedFile.name);
-    }
-    formData.append("fileName", fileName);
-    formData.append("markdown", value);
-    payload.file = formData;
+      const [originalname, filetype] = selectedFile.name.split(".");
 
-    const response = await axios.post("/api/reportapi/submit_report", formData);
-    alert(response.data);
-    window.location.reload();
+      const newName = fileName + "." + filetype;
+      const responseURL = await axios.post("/api/reportapi/getSignedURL", {
+        fileName: newName,
+      });
+      console.log(responseURL.data);
+      fetch(responseURL.data, {
+        method: "PUT",
+        body: selectedFile,
+      })
+        .then(async () => {
+          alert("file uploaded");
+          const response = await axios.post("/api/reportapi/submit_report", {
+            markdown: value,
+            fileName: fileName,
+          });
+          alert(response.data);
+          window.location.reload();
+        })
+        .catch((e) => {
+          alert(
+            "looks like the server can upload your file right now. Please contact the dev team for assistance. Also, try submitting your report without a file or changing the filename"
+          );
+          return;
+        });
+    } else {
+      const response = await axios.post("/api/reportapi/submit_report", {
+        markdown: value,
+        fileName: fileName,
+      });
+      alert(response.data);
+      window.location.reload();
+    }
   }
 
   function loadSuggestions(text): Promise<Suggestion[]> {

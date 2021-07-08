@@ -2,96 +2,33 @@ import axios from "axios";
 import btoa from "btoa";
 import checkPermission from "../../../lib/checkPermission";
 import withSession from "../../../lib/session";
-import formidable from "formidable";
-//var fs = require("fs");
-// var Minio = require("minio");
 
-// var minioClient = new Minio.Client({
-//   endPoint: "min.bonner.hopto.org",
-//   useSSL: true,
-//   accessKey: process.env.minioaccess,
-//   secretKey: process.env.miniosecret,
-// });
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
 
 async function submitReport(req, res) {
-  res.send("dev test");
-  // const check = await checkPermission(req, "report");
+  const check = await checkPermission(req, "report");
+console.log(req.body)
+  if (check) {
+    const user = req.session.get("user");
+    try {
 
-  // if (check) {
-  //   const user = req.session.get("user");
-  //   try {
-  //     //***********************SAVE FILE TO MINIO */
-  //     const form = new formidable.IncomingForm();
-  //     form.parse(req, async function (err, fields, files) {
-  //       if (err) return console.log(err);
-  //       if (files.file) {
-  //         console.log("above to start saveFile");
-  //         //saveFile(files.file, fields.fileName, 0);
-  //         console.log("save File should have been called. This is right below");
-  //       }
-
-  //       if (fields.markdown && fields.markdown != "") {
-  //         console.log("files", files);
-  //         console.log("fields", fields);
-  //         saveMarkdownReport(fields.markdown, fields.fileName, user, 0);
-  //       }
-  //     });
-  //     res.send("save complete");
-  //   } catch (err) {
-  //     console.log("err", err);
-  //     res.send(err);
-  //   }
-  // } else {
-  //   res.send("access denied");
-  // }
+        if (req.body.markdown && req.body.markdown != "") {
+     
+          saveMarkdownReport(req.body.markdown, req.body.fileName, user, 0);
+          res.send("save complete");
+        }else{
+          res.send("empty report, not transmitted to the datastore");
+        }
+    
+    } catch (err) {
+      console.log("err", err);
+      res.send(err);
+    }
+  } else {
+    res.send("access denied");
+  }
 }
 
-// async function saveFile(file, name, counter) {
-//   console.log("inside save file");
-//   try {
-//     const original = file.name;
-//     const [originalname, filetype] = original.split(".");
-
-//     let fileName = name + (counter > 0 ? counter.toString() : "");
-//     fileName = fileName + "." + filetype;
-//     var fileStream = fs.createReadStream(file.path);
-//     var fileStat = fs.stat(file.path, function (error2, stats) {
-//       if (error2) {
-//         console.log(error2);
-//         throw new Error(error2);
-//       }
-//       console.log("above minioClient line 73");
-//       minioClient.putObject(
-//         "meetings",
-//         fileName,
-//         fileStream,
-//         stats.size,
-//         function (err3, objInfo) {
-//           if (err3) {
-//             return console.log(err3); // err should be null
-//           }
-//           console.log("Success", objInfo);
-//         }
-//       );
-//     });
-//     console.log("below minIo client");
-//   } catch (e) {
-//     console.log("err", e);
-//     if (counter < 5) {
-//       saveFile(file, name, counter + 1);
-//     } else {
-//       throw new Error(
-//         "Problem saving report. Filename needs to be unique, so try adding random numbers to the end"
-//       );
-//     }
-//   }
-// }
 
 async function saveMarkdownReport(markdown, name, user, counter) {
   try {
