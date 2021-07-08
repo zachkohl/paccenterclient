@@ -55,6 +55,7 @@ function reporterPage(props) {
   type mdeMode = "write" | "preview";
   const textOp = useRef(null);
   const politicians = useRef(null);
+  const refFileName = useRef(null);
   const [politicianButtons, setPoliticianButtons] = useState(["test"]);
   const [selectedDay, setSelectedDay] = useState(null);
   const [selectedTab, setSelectedTab] = useState("write" as mdeMode);
@@ -236,6 +237,23 @@ function reporterPage(props) {
     },
   };
 
+  useEffect(() => {
+    refFileName.current = fileName;
+  }, [fileName]);
+
+  const audioLInkCommand: Command = {
+    icon: () => (
+      <span role="img" aria-label="AudioLink">
+        audioLink
+      </span>
+    ),
+    execute: (opts) => {
+      opts.textApi.replaceSelection(
+        `[audio link](https://www.paccenter.org/api/file/${refFileName.current}.mp3#t=00:00)`
+      );
+    },
+  };
+
   async function onFileChange(e) {
     setSelectedFile(e.target.files[0]);
   }
@@ -302,12 +320,14 @@ function reporterPage(props) {
         suggestionTriggerCharacters={["#"]}
         commands={{
           politician: politicianCommand,
+          audioLink: audioLInkCommand,
         }}
         toolbarCommands={[
           ["header", "bold", "italic", "strikethrough"],
           ["link", "quote", "code"],
           ["unordered-list", "ordered-list", "checked-list"],
           ["politician"],
+          ["audioLink"],
         ]}
       />
       <Button variant="outlined" color="primary" onClick={handleClickOpen}>
