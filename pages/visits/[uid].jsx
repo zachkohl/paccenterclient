@@ -68,6 +68,7 @@ function VisitsPage(props) {
       field: "visited",
       title: "Visited",
       editable: "never",
+      export: false,
       render: (rowData) => (
         <input
           type="checkbox"
@@ -78,6 +79,7 @@ function VisitsPage(props) {
         />
       ),
     },
+    { field: "PartyDesc", title: "PartyDesc", editable: "never" },
     { field: "address", title: "Address", editable: "never" },
     { field: "notes", title: "Notes" },
   ];
@@ -133,6 +135,7 @@ function VisitsPage(props) {
             data={visits}
             columns={columns}
             options={{
+              actionsColumnIndex: -1,
               selection: true,
               exportButton: true,
               pageSize: 100,
@@ -223,7 +226,7 @@ function VisitsPage(props) {
 
 export async function getServerSideProps(ctx) {
   const uid = ctx.params.uid;
-  let text = `select "FirstName","LastName","ResHouseNumber","ResPreDir","ResStreet","ResCityDesc","ResState","ResZip5",visit_uid as "id","notes","visited" from bcvoterregmarch21 JOIN visits ON bcvoterregmarch21_uid=voter_uid WHERE survey_uid=$1 ORDER BY "LastName" LIMIT 10`;
+  let text = `select "FirstName","LastName","ResHouseNumber","ResPreDir","ResStreet","ResCityDesc","ResState","ResZip5","PartyDesc",visit_uid as "id","notes","visited" from bcvoterregmarch21 JOIN visits ON bcvoterregmarch21_uid=voter_uid WHERE survey_uid=$1`;
   let values = [uid];
   const dbResponse = await db.query(text, values);
 
@@ -243,8 +246,12 @@ export async function getServerSideProps(ctx) {
     const notes = visit.notes ? visit.notes : "";
     const id = visit.id;
     let visited = visit.visited;
+    let PartyDesc = visit.PartyDesc === "Republican" ? "R" : visit.PartyDesc;
+    PartyDesc = PartyDesc === "Independent" ? "I" : PartyDesc;
+    PartyDesc = PartyDesc === "Unaffiliated" ? "U" : PartyDesc;
+    PartyDesc = PartyDesc === "Democrat" ? "D" : PartyDesc;
 
-    return { address, name, notes, id, visited };
+    return { address, name, notes, id, visited, PartyDesc };
   });
   return { props: { visits: visits, original: visits } };
 }
