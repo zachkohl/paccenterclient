@@ -77,6 +77,10 @@ export default function Home(props) {
           )}
           <p>
             {" "}
+            <a href="/resetpassword">Reset Password</a>{" "}
+          </p>
+          <p>
+            {" "}
             <button onClick={logout}>Logout</button>{" "}
           </p>
         </div>

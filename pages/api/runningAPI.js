@@ -1,6 +1,7 @@
 const db = require("../../lib/postgresSetup");
 const axios = require("axios");
 import withSession from "../../lib/session";
+import checkPermission from "../../lib/checkPermission";
 
 export default withSession(async (req, res) => {
   const check = await checkPermission(req, "districtLookup");
