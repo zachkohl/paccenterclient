@@ -301,3 +301,35 @@ visited boolean DEFAULT FALSE,
 job_uid uuid,
    PRIMARY KEY (visit_uid)
 )
+
+
+   create table potentialmembers(
+potentialmember_uid uuid DEFAULT uuid_generate_v4 (),
+email VARCHAR(255),
+fullname VARCHAR(255),
+phone VARCHAR(255),
+address TEXT,
+story TEXT,
+question1 TEXT,
+question2 TEXT,
+question3 TEXT,
+question4 TEXT,
+question5 TEXT,
+question6 TEXT,
+question7 TEXT,
+question8 TEXT,
+question9 TEXT,
+question10 TEXT,
+question11 TEXT,
+question12 TEXT,
+user_uid uuid,
+notes text,
+approver_uid uuid,
+approve_time TIMESTAMP WITH TIME ZONE,
+submit_time TIMESTAMP WITH TIME ZONE,
+submitted BOOLEAN DEFAULT FALSE,
+created TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+job_uid uuid,
+geog geography(POINT),
+   PRIMARY KEY (potentialmember_uid)
+)

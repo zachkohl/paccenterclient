@@ -63,6 +63,12 @@ export default function Home(props) {
               <a href="/volunteer">Volunteer</a>{" "}
             </p>
           )}
+          {user.permissions["volunteer"] && (
+            <p>
+              {" "}
+              <a href="/signupmember">Sign up new PAC member</a>{" "}
+            </p>
+          )}
           {user.permissions["admin"] && (
             <p>
               {" "}
