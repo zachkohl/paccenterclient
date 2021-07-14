@@ -36,6 +36,7 @@ function AdminPage(props) {
   const [modal, setModal] = useState(false);
   const [title, setTitle] = useState("");
   const [email, setEmail] = useState("");
+  const [potentialUid, setPotentialUid] = useState("");
   const [userMessage, setUserMessage] = useState(false);
   const [validateUsername, setValidateUsername] = useState(false);
   const [member, setMember] = useState({ potentialmember_uid: null });
@@ -60,6 +61,8 @@ function AdminPage(props) {
             checked={state[key]}
             onChange={(e) => {
               setUserMessage(false);
+              setUsername("");
+              setPassword(generator.generate({ length: 8, numbers: true }));
               dispatch({
                 type: "change",
                 payload: {
@@ -75,18 +78,25 @@ function AdminPage(props) {
     );
   });
 
-  const ApprovalList = props.users.map((potential, i) => (
-    <li
-      key={potential.potentialmember_uid}
-      onClick={() =>
-        onClickHandler(potential.potentialmember_uid, potential.email)
-      }
-    >
-      {potential.email}
-    </li>
-  ));
+  const ApprovalList = props.users.map((potential, i) => {
+    console.log(potential);
+    const style = potential.approver_uid != null ? { color: "green" } : {};
+
+    return (
+      <li
+        style={style}
+        key={potential.potentialmember_uid}
+        onClick={() =>
+          onClickHandler(potential.potentialmember_uid, potential.email)
+        }
+      >
+        {potential.email}
+      </li>
+    );
+  });
 
   async function onClickHandler(uid, email) {
+    setPotentialUid(uid);
     setEmail(email);
     setTitle("...Loading");
     dispatch({
@@ -114,7 +124,7 @@ function AdminPage(props) {
       .post("/api/user/createUser", {
         email: email,
         giteaAccount: giteaAccount,
-        potential_uid: member.potentialmember_uid,
+        potential_uid: potentialUid,
         username: username,
         password: password,
         permissions: state,
@@ -123,8 +133,7 @@ function AdminPage(props) {
       .then(function (response) {
         if (response.data === "complete") {
           alert("user registered successfully");
-          setUsername("");
-          setPassword("");
+
           dispatch({ type: "reset" });
           setUserMessage(true);
         } else {
@@ -246,7 +255,7 @@ function AdminPage(props) {
 export default AdminPage;
 
 export async function getServerSideProps(ctx) {
-  let text = `Select email,potentialmember_uid from potentialmembers where submitted=TRUE`;
+  let text = `Select email,potentialmember_uid,approver_uid from potentialmembers where submitted=TRUE`;
   let values = [];
   const dbResponse = await db.query(text, values);
   return { props: { users: dbResponse.rows } };

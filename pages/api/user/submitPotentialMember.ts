@@ -33,7 +33,7 @@ export default withSession(async (req, res) => {
 
       const uuid = response.rows[0].potentialmember_uid;
 
-      const url = `https://wwww.paccenter.org/signupform/${uuid}?email=${email}`;
+      const url = `https://www.paccenter.org/signupform/${uuid}?email=${email}`;
       //generate link, send link
       console.log(url);
       //
