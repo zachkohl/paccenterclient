@@ -81,6 +81,12 @@ export default function Home(props) {
               <a href="/surveys">Surveys</a>{" "}
             </p>
           )}
+          {user.permissions["files"] && (
+            <p>
+              {" "}
+              <a href="/files">Files</a>{" "}
+            </p>
+          )}
           <p>
             {" "}
             <a href="/resetpassword">Reset Password</a>{" "}

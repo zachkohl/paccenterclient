@@ -49,8 +49,9 @@ function Values() {
         spending
       </p>
       <p>
-        <b>No supremacist Ideologies</b> Not a mason or member of a secret
-        society intent on taking over the world.
+        <b>(No supremacist Ideologies)</b> I am not a mason or member of a
+        secret society intent on taking over the world. I am also not a white
+        supremacist.
       </p>
     </div>
   );

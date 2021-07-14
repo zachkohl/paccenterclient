@@ -3,15 +3,7 @@ import axios from "axios";
 import Router from "next/router";
 import { Button, FormGroup, Input, Label } from "reactstrap";
 import generator from "generate-password";
-const permissions = {
-  calendar: true,
-  report: false,
-  districtLookup: false,
-  surveys: false,
-  volunteer: false,
-  files:false,
-  admin: false,
-};
+import permissions from "./potentialMembers/permissions";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -34,7 +26,7 @@ export default function Users(props) {
   const [password, setPassword] = useState("");
   const [state, dispatch] = useReducer(reducer, {
     ...permissions,
-    ...props.user.permissions,
+    ...props.user.permissions
   });
   console.log(props.user.permissions);
   const permissionChecks = Object.keys(state).map((key) => {
@@ -49,8 +41,8 @@ export default function Users(props) {
                 type: "change",
                 payload: {
                   key: key,
-                  value: e.target.checked,
-                },
+                  value: e.target.checked
+                }
               });
             }}
           />{" "}
@@ -64,7 +56,7 @@ export default function Users(props) {
     if (confirm("Are you sure you want to delete this user?")) {
       axios
         .post("/api/user/deleteUser", {
-          user_uid: props.user.user_uid,
+          user_uid: props.user.user_uid
         })
         .then(function (response) {
           if (response.data === "complete") {
@@ -88,7 +80,7 @@ export default function Users(props) {
         permissions: state,
         updatePassword: updatePassword,
         user_uid: props.user.user_uid,
-        notes: notes,
+        notes: notes
       })
       .then(function (response) {
         if (response.data === "complete") {

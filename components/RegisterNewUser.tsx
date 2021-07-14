@@ -3,15 +3,7 @@ import axios from "axios";
 import Router from "next/router";
 import { FormGroup, Input, Label } from "reactstrap";
 import generator from "generate-password";
-const permissions = {
-  calendar: true,
-  report: false,
-  districtLookup: false,
-  surveys: false,
-  volunteer: false,
-  files:false,
-  admin: false,
-};
+import permissions from "./potentialMembers/permissions";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -47,8 +39,8 @@ export default function Users(props) {
                 type: "change",
                 payload: {
                   key: key,
-                  value: e.target.checked,
-                },
+                  value: e.target.checked
+                }
               });
             }}
           />{" "}
@@ -64,7 +56,7 @@ export default function Users(props) {
         username: username,
         password: password,
         permissions: state,
-        notes: notes,
+        notes: notes
       })
       .then(function (response) {
         if (response.data === "complete") {
@@ -134,8 +126,9 @@ export default function Users(props) {
           spending
         </p>
         <p>
-          <b>No supremacist Ideologies</b> Not a mason or member of a secret
-          society intent on taking over the world.
+          <b>(No supremacist Ideologies)</b> I am not a mason or member of a
+          secret society intent on taking over the world. I am also not a white
+          supremacist.
         </p>
         <div style={{ padding: "10px", border: "solid black 1px" }}>
           <h5>permissions</h5>

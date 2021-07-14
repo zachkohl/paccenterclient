@@ -14,7 +14,7 @@ var MAILGUN_SMTP_SERVER = process.env.MAILGUN_SMTP_SERVER;
 var domain = "www.paccenter.org";
 var mailgun = require("mailgun-js")({
   apiKey: api_key,
-  domain: MAILGUN_DOMAIN,
+  domain: MAILGUN_DOMAIN
 });
 
 export default withSession(async (req, res) => {
@@ -25,43 +25,33 @@ export default withSession(async (req, res) => {
 
     //validate email system
     console.log(email);
+    try {
+      //
+      //generate new potentialmember row RETURNING *
+      let text = `INSERT INTO potentialmembers(email) VALUES($1) RETURNING *`;
+      const response = await db.query(text, [email]);
 
-    //
-    //generate new potentialmember row RETURNING *
-    let text = `INSERT INTO potentialmembers(email) VALUES($1) RETURNING *`;
-    const response = await db.query(text, [email]);
+      const uuid = response.rows[0].potentialmember_uid;
 
-    const uuid = response.rows[0].potentialmember_uid;
+      const url = `https://wwww.paccenter.org/signupform/${uuid}?email=${email}`;
+      //generate link, send link
+      console.log(url);
+      //
 
-    const url = `https://wwww.paccenter.org/signupform/${uuid}?email=${email}`;
-    //generate link, send link
-    console.log(url);
-    //
+      res.send({ status: "complete", url: url });
+      //send email to paccenter@protonmail.com
 
-    res.send("complete");
-    //send email to paccenter@protonmail.com
+      //create stuff for validation form
 
-    //create stuff for validation form
+      //later, create validation form, validation approval system+activator APIs (gitea, telegram)
 
-    //later, create validation form, validation approval system+activator APIs (gitea, telegram)
-
-    //build training videos for gab
+      //build training videos for gab
+    } catch (e) {
+      res.send("failed. Try another email address");
+    }
   } else {
     res.send("access denied");
   }
 });
 
-function sendEmail() {
-  // var data = {
-  //   from: "Excited User <me@samples.mailgun.org>",
-  //   to: "zach.kohl@paccenter.org",
-  //   subject: "Hello",
-  //   text: "Testing some Mailgun awesomeness!",
-  // };
-  // mailgun.messages().send(data, function (error, body) {
-  //   console.log(body);
-  //   if (error) {
-  //     console.log(error);
-  //   }
-  // });
-}
+function sendEmail() {}

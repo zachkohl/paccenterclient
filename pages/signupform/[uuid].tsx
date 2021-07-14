@@ -3,12 +3,14 @@ import react, {
   useRef,
   useEffect,
   useReducer,
-  forwardRef,
+  forwardRef
 } from "react";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 const db = require("../../lib/postgresSetup");
 import useUser from "../../lib/useUser";
 import axios from "axios";
+import SaveDialog from "../../components/reports/SaveDialog";
+import { useRouter } from "next/router";
 
 function SignupForm(props) {
   const [fullname, setFullname] = useState(props.fullname);
@@ -25,6 +27,8 @@ function SignupForm(props) {
   const [question8, setQuestion8] = useState(props.question8);
   const [question9, setQuestion9] = useState(props.question9);
   const [question10, setQuestion10] = useState(props.question10);
+  const [telegram, setTelegram] = useState(props.telegramUsername);
+  const router = useRouter();
 
   async function save(message) {
     const potentialmember_uid = props.potentialmember_uid;
@@ -43,7 +47,7 @@ function SignupForm(props) {
       question7,
       question8,
       question9,
-      question10,
+      question10
     };
     const response = await axios.post(
       "/api/user/updatePotentialMember",
@@ -52,6 +56,25 @@ function SignupForm(props) {
     if (message) {
       alert(response.data);
     }
+    return "complete";
+  }
+
+  async function submit() {
+    if (confirm("Are you sure you want to submit your application?")) {
+      const x = await save(false);
+      const response = await axios.post(
+        "/api/user/updatePotentialMemberSubmitted",
+        {
+          potentialmember_uid: props.potentialmember_uid
+        }
+      );
+      alert(response.data);
+      router.replace(router.asPath);
+    }
+  }
+
+  if (props.submitted) {
+    return <h1>application submitted for approval</h1>;
   }
 
   return (
@@ -88,6 +111,16 @@ function SignupForm(props) {
           <input
             value={address}
             onChange={(e) => setAddress(e.target.value)}
+          ></input>
+        </div>
+        <div>
+          <p>
+            What is your telegram username? (optional: useful if you are
+            interested in getting push notifications)
+          </p>
+          <input
+            value={telegram}
+            onChange={(e) => setTelegram(e.target.value)}
           ></input>
         </div>
         <div style={{ marginTop: "50px" }}>
@@ -219,7 +252,15 @@ function SignupForm(props) {
           ></TextareaAutosize>
         </div>
       </div>
-      <button onClick={(e) => save(true)}>Save</button>
+      <div style={{ marginBottom: "10px" }}>
+        <span style={{ float: "left", marginLeft: "10vw" }}>
+          <button onClick={(e) => save(true)}>Save</button>
+        </span>
+        <span style={{ float: "right", marginRight: "10vw" }}>
+          {" "}
+          <button onClick={(e) => submit()}>Submit</button>
+        </span>
+      </div>
     </div>
   );
 }
@@ -228,15 +269,15 @@ export async function getServerSideProps(ctx) {
   const uid = ctx.params.uuid;
   const email = ctx.query.email;
   try {
-    let text = `select potentialmember_uid, email, fullname, phone, address, story, question1, question2, question3, question4, question5, question6, question7, question8, question9, question10, question11, question12 from potentialmembers where email = $1 AND potentialmember_uid=$2`;
+    let text = `select potentialmember_uid, email, fullname, phone, address, story, question1, question2, question3, question4, question5, question6, question7, question8, question9, question10, question11, telegramUsername,submitted from potentialmembers where email = $1 AND potentialmember_uid=$2`;
     let values = [email, uid];
     const dbResponse = await db.query(text, values);
     if (dbResponse.rows.length == 0) {
       return {
         redirect: {
           permanent: false,
-          destination: "/",
-        },
+          destination: "/"
+        }
       };
     }
 
@@ -246,8 +287,8 @@ export async function getServerSideProps(ctx) {
     return {
       redirect: {
         permanent: false,
-        destination: "/",
-      },
+        destination: "/"
+      }
     };
   }
 }

@@ -5,23 +5,29 @@ import Values from "../components/Values";
 import isEmail from "validator/lib/isEmail";
 
 function singupMember(props) {
+  const [emailContents, setEmailContents] = useState(``);
   const [email, setEmail] = useState("");
-  const { user } = useUser({
-    redirectTo: "/login",
-    permission: "volunteer",
-  });
-  if (!user || user.isLoggedIn === false) {
-    return <div>loading...</div>;
-  }
+  // const { user } = useUser({
+  //   redirectTo: "/login",
+  //   permission: "volunteer"
+  // });
+  // if (!user || user.isLoggedIn === false) {
+  //   return <div>loading...</div>;
+  // }
 
   async function sumbitHandler() {
     if (isEmail(email)) {
       const response = await axios.post("/api/user/submitPotentialMember", {
-        email: email,
+        email: email
       });
-      if (response.data === "complete") {
+      if (response.data.status === "complete") {
         alert("email sucessfully recieved");
-        setEmail("");
+        setEmailContents(`
+        Congratulations: you have been recommended to join the Politically Active Christians Team. Please follow the below link to request membership and receive access to our data repositories.
+        ${response.data.url}
+        `);
+      } else {
+        alert("Something went wrong. Please try another email address");
       }
     } else {
       alert("you did not enter a proper email address");
@@ -42,6 +48,7 @@ function singupMember(props) {
 
       <div>
         <button onClick={sumbitHandler}>submit</button>
+        <div style={{ margin: "10px" }}>{emailContents}</div>
         <Values />
       </div>
     </div>
