@@ -13,6 +13,7 @@ export default withSession(async (req, res) => {
     const password = req.body.password;
     const permissions = req.body.permissions;
     const notes = req.body.notes;
+
     try {
       const hashed = await bcrypt.hash(password, 10);
       let text = `INSERT INTO USERS(username,hash,permissions,notes) VALUES($1,$2,$3,$4) RETURNING *`;
@@ -20,14 +21,15 @@ export default withSession(async (req, res) => {
       const response = await db.query(text, values);
 
       if (response.rows.length > 0) {
-        if (req.body.potentialmember_uid) {
+        if (req.body.potential_uid) {
+          console.log("got here");
           const date = Date();
           text = `UPDATE potentialmembers SET user_uid=$1, approver_uid=$2, approve_time=$3 WHERE potentialmember_uid=$4`;
           values = [
             response.rows[0].user_uid,
             user_uid,
             date,
-            req.body.potentialmember_uid
+            req.body.potential_uid
           ];
           const potentialResponse = await db.query(text, values);
         }
@@ -40,8 +42,6 @@ export default withSession(async (req, res) => {
             send_notify: false,
             username: username
           };
-
-          console.log(payload);
 
           const adddress = `https://paccenterbot:${process.env.paccenterbot}@git.bonner.hopto.org/api/v1/admin/users`;
           const axiosResponse = await axios.post(adddress, payload);
