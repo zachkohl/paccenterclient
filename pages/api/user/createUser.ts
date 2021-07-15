@@ -28,7 +28,6 @@ export default withSession(async (req, res) => {
           values = [
             response.rows[0].user_uid,
             user_uid,
-            date,
             req.body.potential_uid
           ];
           const potentialResponse = await db.query(text, values);
