@@ -24,7 +24,7 @@ export default withSession(async (req, res) => {
         if (req.body.potential_uid) {
           console.log("got here");
           const date = Date();
-          text = `UPDATE potentialmembers SET user_uid=$1, approver_uid=$2, approve_time=$3 WHERE potentialmember_uid=$4`;
+          text = `UPDATE potentialmembers SET user_uid=$1, approver_uid=$2  WHERE potentialmember_uid=$3`;
           values = [
             response.rows[0].user_uid,
             user_uid,

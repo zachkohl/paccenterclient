@@ -17,6 +17,7 @@ import ReadQuestions from "../components/potentialMembers/ReadQuestions";
 import permissions from "../components/potentialMembers/permissions";
 import generator from "generate-password";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -47,6 +48,7 @@ function AdminPage(props) {
   const [notes, setNotes] = useState("");
   const [giteaAccount, setGiteaAccount] = useState(true);
   const [state, dispatch] = useReducer(reducer, permissions);
+  const router = useRouter();
   const { user } = useUser({ redirectTo: "/login", permission: "admin" });
   if (!user || user.isLoggedIn === false) {
     return <div>loading...</div>;
@@ -133,7 +135,7 @@ function AdminPage(props) {
       .then(function (response) {
         if (response.data === "complete") {
           alert("user registered successfully");
-
+          router.replace(router.asPath);
           dispatch({ type: "reset" });
           setUserMessage(true);
         } else {
