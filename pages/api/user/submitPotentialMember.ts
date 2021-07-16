@@ -11,11 +11,9 @@ var MAILGUN_SMTP_LOGIN = process.env.MAILGUN_SMTP_LOGIN;
 var MAILGUN_SMTP_PASSWORD = process.env.MAILGUN_SMTP_PASSWORD;
 var MAILGUN_SMTP_PORT = process.env.MAILGUN_SMTP_PORT;
 var MAILGUN_SMTP_SERVER = process.env.MAILGUN_SMTP_SERVER;
-var domain = "www.paccenter.org";
-var mailgun = require("mailgun-js")({
-  apiKey: api_key,
-  domain: MAILGUN_DOMAIN
-});
+var domain = "paccenter.org";
+const mailgun = require("mailgun-js");
+const mg = mailgun({ apiKey: api_key, domain: domain });
 
 export default withSession(async (req, res) => {
   const check = await checkPermission(req, "volunteer");
@@ -37,7 +35,7 @@ export default withSession(async (req, res) => {
       //generate link, send link
       console.log(url);
       //
-
+      sendEmail(email, url);
       res.send({ status: "complete", url: url });
       //send email to paccenter@protonmail.com
 
@@ -54,4 +52,16 @@ export default withSession(async (req, res) => {
   }
 });
 
-function sendEmail() {}
+function sendEmail(email, url) {
+  const data = {
+    from: "DO_NOT_REPLY<admin@paccenter.org>",
+    to: email,
+    subject: "PACCENTER Application link",
+    text: `Congratulations: you have been recommended to join the Politically Active Christians Team. Please follow the below link to request membership and receive access to our data repositories.
+    ${url}`
+  };
+  mg.messages().send(data, function (error, body) {
+    if (error) console.log(error);
+    console.log("email sent");
+  });
+}
